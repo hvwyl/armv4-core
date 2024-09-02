@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>armv4core instructions</title>
+    <style>
+        table {
+            border: 1px solid #000000;
+            border-collapse: collapse;
+        }
+
+        td,
+        th {
+            border: 1px solid #000000;
+        }
+
+        hr {
+            border: 1px solid #000000;
+            border-collapse: collapse;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>armv4core instructions</h1>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="32">bits</th>
+                <th rowspan="2">Assembly</th>
+                <th rowspan="2">Instruction</th>
+                <th rowspan="2">Category</th>
+            </tr>
+            <tr>
+                <th width="25">31</th>
+                <th width="25">30</th>
+                <th width="25">29</th>
+                <th width="25">28</th>
+                <th width="25">27</th>
+                <th width="25">26</th>
+                <th width="25">25</th>
+                <th width="25">24</th>
+                <th width="25">23</th>
+                <th width="25">22</th>
+                <th width="25">21</th>
+                <th width="25">20</th>
+                <th width="25">19</th>
+                <th width="25">18</th>
+                <th width="25">17</th>
+                <th width="25">16</th>
+                <th width="25">15</th>
+                <th width="25">14</th>
+                <th width="25">13</th>
+                <th width="25">12</th>
+                <th width="25">11</th>
+                <th width="25">10</th>
+                <th width="25">9</th>
+                <th width="25">8</th>
+                <th width="25">7</th>
+                <th width="25">6</th>
+                <th width="25">5</th>
+                <th width="25">4</th>
+                <th width="25">3</th>
+                <th width="25">2</th>
+                <th width="25">1</th>
+                <th width="25">0</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>AND{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Bitwise AND</td>
+                <td rowspan="21">Data-processing (register)</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>EOR{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Bitwise Exclusive OR</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>SUB{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Subtract</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>RSB{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Reverse Subtract</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>ADD{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Add</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>ADC{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Add with Carry</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>SBC{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Subtract with Carry</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>RSC{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Reverse Subtract with Carry</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>TST&lt;c&gt; &lt;Rn&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Test</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>TEQ&lt;c&gt; &lt;Rn&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Test Equivalence</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>CMP&lt;c&gt; &lt;Rn&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Compare</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>CMN&lt;c&gt; &lt;Rn&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Compare Negative</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>ORR{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Bitwise OR</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rd</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>MOV{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rm&gt;</td>
+                <td>Move</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5(!=00000)</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>LSL{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rm&gt;, #&lt;imm5&gt;</td>
+                <td>Logical Shift Left</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>LSR{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rm&gt;, #&lt;imm&gt;</td>
+                <td>Logical Shift Right</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>ASR{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rm&gt;, #&lt;imm&gt;</td>
+                <td>Arithmetic Shift Right</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rd</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>RRX{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rm&gt;</td>
+                <td>Rotate Right with Extend</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5(!=00000)</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>ROR{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rm&gt;, #&lt;imm&gt;</td>
+                <td>Rotate Right</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>BIC{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Bitwise Bit Clear</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rd</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>MVN{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Bitwise NOT</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>AND{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;, &lt;type&gt;
+                    &lt;Rs&gt;</td>
+                <td>Bitwise AND</td>
+                <td rowspan="19">Data-processing (register-shifted register)</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>EOR{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;, &lt;type&gt;
+                    &lt;Rs&gt;</td>
+                <td>Bitwise Exclusive OR</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>SUB{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;, &lt;type&gt;
+                    &lt;Rs&gt;</td>
+                <td>Subtract</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>RSB{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;, &lt;type&gt;
+                    &lt;Rs&gt;</td>
+                <td>Reverse Subtract</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>ADD{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;, &lt;type&gt;
+                    &lt;Rs&gt;</td>
+                <td>Add</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>ADC{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;, &lt;type&gt;
+                    &lt;Rs&gt;</td>
+                <td>Add with Carry</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>SBC{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;, &lt;type&gt;
+                    &lt;Rs&gt;</td>
+                <td>Subtract with Carry</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>RSC{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;, &lt;type&gt;
+                    &lt;Rs&gt;</td>
+                <td>Reverse Subtract with Carry</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>TST&lt;c&gt; &lt;Rn&gt;, &lt;Rm&gt;, &lt;type&gt; &lt;Rs&gt;</td>
+                <td>Test</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>TEQ&lt;c&gt; &lt;Rn&gt;, &lt;Rm&gt;, &lt;type&gt; &lt;Rs&gt;</td>
+                <td>Test Equivalence</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>CMP&lt;c&gt; &lt;Rn&gt;, &lt;Rm&gt;, &lt;type&gt; &lt;Rs&gt;</td>
+                <td>Compare</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>CMN&lt;c&gt; &lt;Rn&gt;, &lt;Rm&gt;, &lt;type&gt; &lt;Rs&gt;</td>
+                <td>Compare Negative</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>ORR{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;, &lt;type&gt;
+                    &lt;Rs&gt;</td>
+                <td>Bitwise OR</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rm</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td>LSL{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;</td>
+                <td>Logical Shift Left</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rm</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td>LSR{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;</td>
+                <td>Logical Shift Right</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rm</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td>ASR{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;</td>
+                <td>Arithmetic Shift Right</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rm</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td>ROR{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;</td>
+                <td>Rotate Right</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>BIC{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;, &lt;type&gt;
+                    &lt;Rs&gt;</td>
+                <td>Bitwise Bit Clear</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Rs</td>
+                <td>0</td>
+                <td colspan="2">type</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>MVN{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rm&gt;, &lt;type&gt; &lt;Rs&gt;</td>
+                <td>Bitwise NOT</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="12">imm12</td>
+                <td>AND{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, #&lt;const&gt;</td>
+                <td>Bitwise AND</td>
+                <td rowspan="18">Data-processing (immediate)</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="12">imm12</td>
+                <td>EOR{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, #&lt;const&gt;</td>
+                <td>Bitwise Exclusive OR</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn(!=1111)</td>
+                <td colspan="4">Rd</td>
+                <td colspan="12">imm12</td>
+                <td>SUB{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, #&lt;const&gt;</td>
+                <td>Subtract</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rd</td>
+                <td colspan="12">imm12</td>
+                <td>ADR&lt;c&gt; &lt;Rd&gt;, &lt;label&gt;<hr>SUB &lt;Rd&gt;, PC, #0</td>
+                <td>Subtract form PC-relative address</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="12">imm12</td>
+                <td>RSB{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, #&lt;const&gt;</td>
+                <td>Reverse Subtract</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="12">imm12</td>
+                <td>ADD{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, #&lt;const&gt;</td>
+                <td>Add</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rd</td>
+                <td colspan="12">imm12</td>
+                <td>ADR&lt;c&gt; &lt;Rd&gt;, &lt;label&gt;</td>
+                <td>Add form PC-relative address</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="12">imm12</td>
+                <td>ADC{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, #&lt;const&gt;</td>
+                <td>Add with Carry</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="12">imm12</td>
+                <td>SBC{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, #&lt;const&gt;</td>
+                <td>Subtract with Carry</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="12">imm12</td>
+                <td>RSC{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, #&lt;const&gt;</td>
+                <td>Reverse Subtract with Carry</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="12">imm12</td>
+                <td>TST&lt;c&gt; &lt;Rn&gt;, #&lt;const&gt;</td>
+                <td>Test</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="12">imm12</td>
+                <td>TEQ&lt;c&gt; &lt;Rn&gt;, #&lt;const&gt;</td>
+                <td>Test Equivalence</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="12">imm12</td>
+                <td>CMP&lt;c&gt; &lt;Rn&gt;, #&lt;const&gt;</td>
+                <td>Compare</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="12">imm12</td>
+                <td>CMN&lt;c&gt; &lt;Rn&gt;, #&lt;const&gt;</td>
+                <td>Compare Negative</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="12">imm12</td>
+                <td>ORR{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, #&lt;const&gt;</td>
+                <td>Bitwise OR</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rd</td>
+                <td colspan="12">imm12</td>
+                <td>MOV{S}&lt;c&gt; &lt;Rd&gt;, #&lt;const&gt;</td>
+                <td>Move</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rd</td>
+                <td colspan="12">imm12</td>
+                <td>BIC{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, #&lt;const&gt;</td>
+                <td>Bitwise Bit Clear</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rd</td>
+                <td colspan="12">imm12</td>
+                <td>MVN{S}&lt;c&gt; &lt;Rd&gt;, #&lt;const&gt;</td>
+                <td>Bitwise NOT</td>
+            </tr>
+        </tbody>
+        <tbody style="background-color: red;">
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td colspan="4">Rm</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td>MUL{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;</td>
+                <td>Multiply</td>
+                <td rowspan="6">Multiply and multiply accumulate</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">Rd</td>
+                <td colspan="4">Ra</td>
+                <td colspan="4">Rm</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td>MLA{S}&lt;c&gt; &lt;Rd&gt;, &lt;Rn&gt;, &lt;Rm&gt;, &lt;Ra&gt;</td>
+                <td>Multiply Accumulate</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">RdHi</td>
+                <td colspan="4">RdLo</td>
+                <td colspan="4">Rm</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td>UMULL{S}&lt;c&gt; &lt;RdLo&gt;, &lt;RdHi&gt;, &lt;Rn&gt;, &lt;Rm&gt;</td>
+                <td>Unsigned Multiply Long</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">RdHi</td>
+                <td colspan="4">RdLo</td>
+                <td colspan="4">Rm</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td>UMLAL{S}&lt;c&gt; &lt;RdLo&gt;, &lt;RdHi&gt;, &lt;Rn&gt;, &lt;Rm&gt;</td>
+                <td>Unsigned Multiply Accumulate Long</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>S</td>
+                <td colspan="4">RdHi</td>
+                <td colspan="4">RdLo</td>
+                <td colspan="4">Rm</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td>SMULL{S}&lt;c&gt; &lt;RdLo&gt;, &lt;RdHi&gt;, &lt;Rn&gt;, &lt;Rm&gt;</td>
+                <td>Signed Multiply Long</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>S</td>
+                <td colspan="4">RdHi</td>
+                <td colspan="4">RdLo</td>
+                <td colspan="4">Rm</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td>SMLAL{S}&lt;c&gt; &lt;RdLo&gt;, &lt;RdHi&gt;, &lt;Rn&gt;, &lt;Rm&gt;</td>
+                <td>Signed Multiply Accumulate Long</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>0</td>
+                <td>W</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>STRH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;,+/-&lt;Rm&gt;]{!}<hr>STRH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;],+/-&lt;Rm&gt;</td>
+                <td>Store Halfword</td>
+                <td rowspan="13">Extra load/store instructions</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>0</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>LDRH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;,+/-&lt;Rm&gt;]{!}<hr>LDRH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;],+/-&lt;Rm&gt;</td>
+                <td>Load Halfword</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>W</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="4">imm4H</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">imm4L</td>
+                <td>STRH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;{, #+/-&lt;imm8&gt;}]<hr>STRH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;], #+/-&lt;imm8&gt;<hr>STRH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;, #+/-&lt;imm8&gt;]!</td>
+                <td>Store Halfword</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn(!=1111)</td>
+                <td colspan="4">Rt</td>
+                <td colspan="4">imm4H</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">imm4L</td>
+                <td>LDRH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;{, #+/-&lt;imm8&gt;}]<hr>LDRH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;], #+/-&lt;imm8&gt;<hr>LDRH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;, #+/-&lt;imm8&gt;]!</td>
+                <td>Load Halfword</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>W</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rt</td>
+                <td colspan="4">imm4H</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">imm4L</td>
+                <td>LDRH&lt;c&gt; &lt;Rt&gt;, &lt;label&gt;<hr>LDRH&lt;c&gt; &lt;Rt&gt;, [PC, #-0]</td>
+                <td>Load Halfword</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>0</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>LDRSB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;,+/-&lt;Rm&gt;]{!}<hr>LDRSB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;],+/-&lt;Rm&gt;</td>
+                <td>Load Signed Byte</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn(!=1111)</td>
+                <td colspan="4">Rt</td>
+                <td colspan="4">imm4H</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">imm4L</td>
+                <td>LDRSB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;{, #+/-&lt;imm8&gt;}]<hr>LDRSB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;], #+/-&lt;imm8&gt;<hr>LDRSB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;, #+/-&lt;imm8&gt;]!</td>
+                <td>Load Signed Byte</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>W</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rt</td>
+                <td colspan="4">imm4H</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">imm4L</td>
+                <td>LDRSB&lt;c&gt; &lt;Rt&gt;, &lt;label&gt;<hr>LDRSB&lt;c&gt; &lt;Rt&gt;, [PC, #-0]</td>
+                <td>Load Signed Byte</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>0</td>
+                <td>W</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>STRD&lt;c&gt; &lt;Rt&gt;, &lt;Rt2&gt;, [&lt;Rn&gt;,+/-&lt;Rm&gt;]{!}<hr>STRD&lt;c&gt; &lt;Rt&gt;, &lt;Rt2&gt;, [&lt;Rn&gt;],+/-&lt;Rm&gt;</td>
+                <td>Store Dual</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>0</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rm</td>
+                <td>LDRSH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;,+/-&lt;Rm&gt;]{!}<hr>LDRSH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;],+/-&lt;Rm&gt;</td>
+                <td>Load Signed Halfword</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>W</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="4">imm4H</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">imm4L</td>
+                <td>STRD&lt;c&gt; &lt;Rt&gt;, &lt;Rt2&gt;, [&lt;Rn&gt;{, #+/-&lt;imm8&gt;}]<hr>STRD&lt;c&gt; &lt;Rt&gt;, &lt;Rt2&gt;, [&lt;Rn&gt;], #+/-&lt;imm8&gt;<hr>STRD&lt;c&gt; &lt;Rt&gt;, &lt;Rt2&gt;, [&lt;Rn&gt;, #+/-&lt;imm8&gt;]!</td>
+                <td>Store Dual</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn(!=1111)</td>
+                <td colspan="4">Rt</td>
+                <td colspan="4">imm4H</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">imm4L</td>
+                <td>LDRSH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;{, #+/-&lt;imm8&gt;}]<hr>LDRSH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;], #+/-&lt;imm8&gt;<hr>LDRSH&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;, #+/-&lt;imm8&gt;]!</td>
+                <td>Load Signed Halfword</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>W</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rt</td>
+                <td colspan="4">imm4H</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">imm4L</td>
+                <td>LDRSH&lt;c&gt; &lt;Rt&gt;, &lt;label&gt;<hr>LDRSH&lt;c&gt; &lt;Rt&gt;, [PC, #-0]</td>
+                <td>Load Signed Halfword</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>B</td>
+                <td>0</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="4">Rt2</td>
+                <td>SWP{B}&lt;c&gt; &lt;Rt&gt;, &lt;Rt2&gt;, [&lt;Rn&gt;]</td>
+                <td>Swap Word, Swap Byte (deprecated in
+                    ARMv6* and ARMv7, OPTIONAL in ARMv7VE)</td>
+                <td>Synchronization primitives</td>
+            </tr>
+        </tbody>
+        <tbody style="background-color: red;">
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td colspan="4">(1)(1)(1)(1)</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>CSDB{&lt;c&gt;}</td>
+                <td>Consumption of Speculative Data Barrier</td>
+                <td rowspan="3">MSR (immediate), and hints</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td colspan="2">mask</td>
+                <td>0</td>
+                <td>0</td>
+                <td colspan="4">(1)(1)(1)(1)</td>
+                <td colspan="12">imm12</td>
+                <td>MSR&lt;c&gt; &lt;spec_reg&gt;, #&lt;const&gt;</td>
+                <td>Move to Special register, Application level</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>R</td>
+                <td>1</td>
+                <td>0</td>
+                <td colspan="4">mask</td>
+                <td colspan="4">(1)(1)(1)(1)</td>
+                <td colspan="12">imm12</td>
+                <td>MSR&lt;c&gt; &lt;spec_reg&gt;, #&lt;const&gt;</td>
+                <td>Move to Special register, System
+                    level</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>R</td>
+                <td>0</td>
+                <td>0</td>
+                <td colspan="4">(1)(1)(1)(1)</td>
+                <td colspan="4">Rd</td>
+                <td colspan="2">(0)(0)</td>
+                <td>0</td>
+                <td>(0)</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td colspan="4">(0)(0)(0)(0)</td>
+                <td>MRS&lt;c&gt; &lt;Rd&gt;, &lt;spec_reg&gt;</td>
+                <td>Move from Special register</td>
+                <td rowspan="3">Miscellaneous instructions</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td colspan="2">mask</td>
+                <td>0</td>
+                <td>0</td>
+                <td colspan="4">(1)(1)(1)(1)</td>
+                <td colspan="2">(0)(0)</td>
+                <td>0</td>
+                <td>(0)</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td>MSR&lt;c&gt; &lt;spec_reg&gt;, &lt;Rn&gt;</td>
+                <td>Move to Special register, Application level</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>R</td>
+                <td>1</td>
+                <td>0</td>
+                <td colspan="2">mask</td>
+                <td colspan="2"></td>
+                <td colspan="4">(1)(1)(1)(1)</td>
+                <td colspan="2">(0)(0)</td>
+                <td>0</td>
+                <td>(0)</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td>MSR&lt;c&gt; &lt;spec_reg&gt;, &lt;Rn&gt;</td>
+                <td>Move to Special register, System level</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>0</td>
+                <td>W</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="12">imm12</td>
+                <td>STR&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;{, #+/-&lt;imm12&gt;}]<hr>STR&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;], #+/-&lt;imm12&gt;<hr>STR&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;, #+/-&lt;imm12&gt;]!</span></td>
+                <td>Store Register (immediate)</td>
+                <td rowspan="10">Load/store word and unsigned byte</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>P</td>
+                <td>U</td>
+                <td>0</td>
+                <td>W</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>STR&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;,+/-&lt;Rm&gt;{, &lt;shift&gt;}]{!}<hr>STR&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;],+/-&lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Store Register (register)</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>0</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="12">imm12</td>
+                <td>LDR&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;{, #+/-&lt;imm12&gt;}]<hr>LDR&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;], #+/-&lt;imm12&gt;<hr>LDR&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;, #+/-&lt;imm12&gt;]!</span></td>
+                <td>Load Register (immediate)</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>0</td>
+                <td>W</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rt</td>
+                <td colspan="12">imm12</td>
+                <td>LDR&lt;c&gt; &lt;Rt&gt;, &lt;label&gt;<hr>LDR&lt;c&gt; &lt;Rt&gt;, [PC, #-0]</td>
+                <td>Load Register (literal)</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>P</td>
+                <td>U</td>
+                <td>0</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>LDR&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;,+/-&lt;Rm&gt;{, &lt;shift&gt;}]{!}<hr>LDR&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;],+/-&lt;Rm&gt;{, &lt;shift&gt;}</span></td>
+                <td>Load Register (register)</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>W</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="12">imm12</td>
+                <td>STRB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;{, #+/-&lt;imm12&gt;}]<hr>STRB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;], #+/-&lt;imm12&gt;<hr>STRB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;, #+/-&lt;imm12&gt;]!</td>
+                <td>Store Register Byte (immediate)</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>W</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>STRB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;,+/-&lt;Rm&gt;{, &lt;shift&gt;}]{!}<hr>STRB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;],+/-&lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Store Register Byte (register)</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="12">imm12</td>
+                <td>LDRB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;{, #+/-&lt;imm12&gt;}]<hr>LDRB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;], #+/-&lt;imm12&gt;<hr>LDRB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;, #+/-&lt;imm12&gt;]!</td>
+                <td>Load Register Byte (immediate)</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>W</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="4">Rt</td>
+                <td colspan="12">imm12</td>
+                <td>LDRB&lt;c&gt; &lt;Rt&gt;, &lt;label&gt;<hr>LDRB&lt;c&gt; &lt;Rt&gt;, [PC, #-0]</td>
+                <td>Load Register Byte (literal)</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="4">Rt</td>
+                <td colspan="5">imm5</td>
+                <td colspan="2">type</td>
+                <td>0</td>
+                <td colspan="4">Rm</td>
+                <td>LDRB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;,+/-&lt;Rm&gt;{, &lt;shift&gt;}]{!}<hr>LDRB&lt;c&gt; &lt;Rt&gt;, [&lt;Rn&gt;],+/-&lt;Rm&gt;{, &lt;shift&gt;}</td>
+                <td>Load Register Byte (register)</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>W</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td colspan="16">register_list</td>
+                <td>STMDA&lt;c&gt; &lt;Rn&gt;{!}, &lt;registers&gt;</td>
+                <td>Store Multiple Decrement After</td>
+                <td rowspan="15">Branch, branch with link, and block data transfer</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="16">register_list</td>
+                <td>LDMDA&lt;c&gt; &lt;Rn&gt;{!}, &lt;registers&gt;</td>
+                <td>Load Multiple Decrement After</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>W</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td colspan="16">register_list</td>
+                <td>STM&lt;c&gt; &lt;Rn&gt;{!}, &lt;registers&gt;</td>
+                <td>Store Multiple Increment After</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="16">register_list</td>
+                <td>LDM&lt;c&gt; &lt;Rn&gt;{!}, &lt;registers&gt;</td>
+                <td>Load Multiple Increment After</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="16">register_list</td>
+                <td>POP&lt;c&gt; &lt;registers&gt;</td>
+                <td>Pop multiple registers</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>W</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td colspan="16">register_list</td>
+                <td>STMDB&lt;c&gt; &lt;Rn&gt;{!}, &lt;registers&gt;</td>
+                <td>Store Multiple Decrement Before</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td colspan="16">register_list</td>
+                <td>PUSH&lt;c&gt; &lt;registers&gt;</td>
+                <td>Push multiple registers</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="16">register_list</td>
+                <td>LDMDB&lt;c&gt; &lt;Rn&gt;{!}, &lt;registers&gt;</td>
+                <td>Load Multiple Decrement Before</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>W</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td colspan="16">register_list</td>
+                <td>STMIB&lt;c&gt; &lt;Rn&gt;{!}, &lt;registers&gt;</td>
+                <td>Store Multiple Increment Before</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td colspan="16">register_list</td>
+                <td>LDMIB&lt;c&gt; &lt;Rn&gt;{!}, &lt;registers&gt;</td>
+                <td>Load Multiple Increment Before</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>(0)</td>
+                <td>0</td>
+                <td colspan="4">Rn</td>
+                <td colspan="16">register_list</td>
+                <td>STM{&lt;amode&gt;}&lt;c&gt; &lt;Rn&gt;, &lt;registers&gt;</td>
+                <td>Store Multiple (user registers)</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>(0)</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td>0</td>
+                <td colspan="15">register_list</td>
+                <td>LDM{&lt;amode&gt;}&lt;c&gt; &lt;Rn&gt;, &lt;registers_without_pc&gt;</td>
+                <td>Load Multiple (user registers)</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>P</td>
+                <td>U</td>
+                <td>1</td>
+                <td>W</td>
+                <td>1</td>
+                <td colspan="4">Rn</td>
+                <td>1</td>
+                <td colspan="15">register_list</td>
+                <td>LDM{&lt;amode&gt;}&lt;c&gt; &lt;Rn&gt;{!}, &lt;registers_with_pc&gt;</td>
+                <td>Load Multiple (exception return)</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td colspan="24">imm24</td>
+                <td>B&lt;c&gt; &lt;label&gt;</td>
+                <td>Branch</td>
+            </tr>
+            <tr>
+                <td colspan="4">cond</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td colspan="24">imm24</td>
+                <td>BL&lt;c&gt; &lt;label&gt;</td>
+                <td>Branch with Link</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
