@@ -49,14 +49,8 @@ module registers (
     assign o_re_reg = reg_output[i_re_code];
 
     wire rd_en_ex, rd_en_wb;
-    wire pc_en_ex, pc_en_wb;
     assign rd_en_ex = (i_rd_code_ex != 4'b1111)&i_rd_en_ex;
     assign rd_en_wb = (i_rd_code_wb != 4'b1111)&i_rd_en_wb;
-    assign pc_en_ex = (i_rd_code_ex == 4'b1111)&i_rd_en_ex;
-    assign pc_en_wb = (i_rd_code_wb == 4'b1111)&i_rd_en_wb;
-    
-    assign o_pc_en = pc_en_ex|pc_en_wb;
-    assign o_pc_reg = pc_en_wb?(i_rd_reg_wb):(i_rd_reg_ex);
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -93,4 +87,10 @@ module registers (
             end
         end
     end
+
+    wire pc_en_ex, pc_en_wb;
+    assign pc_en_ex = (i_rd_code_ex == 4'b1111)&i_rd_en_ex;
+    assign pc_en_wb = (i_rd_code_wb == 4'b1111)&i_rd_en_wb;
+    assign o_pc_en = pc_en_ex|pc_en_wb;
+    assign o_pc_reg = pc_en_wb?(i_rd_reg_wb):(i_rd_reg_ex);
 endmodule
