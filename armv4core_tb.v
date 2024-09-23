@@ -12,8 +12,8 @@
 `define TB_RAM_SIZE 65536   // size of ram (unit in byte)
 
 `include "def.v"
-module armv4core_mult_tb ();
-reg clk, rst_n;
+module armv4core_tb ();
+reg clk, rst_n, en;
 
 initial begin
     clk = 0;
@@ -28,6 +28,14 @@ initial begin
     rst_n = 1;
     #40000
     $finish();
+end
+
+initial begin
+    en = 1;
+    #1000
+    en = 0;
+    #1000
+    en = 1;
 end
 
 reg [7:0] ram [`TB_RAM_SIZE-1:0];
@@ -105,7 +113,7 @@ end
 armv4core armv4core_0(
     .clk                (clk),
     .rst_n              (rst_n),
-    .en                 (1'b1),
+    .en                 (en),
 
     /* rom bus */
     .o_rom_en           (rom_en),
