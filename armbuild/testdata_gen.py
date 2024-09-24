@@ -26,14 +26,7 @@ for (opt, arg) in opts:
     elif opt == "-o":
         ofile = arg
 
-testdata = ""
-with open(ifile, "rb") as f:
-    while read := f.read(1):
+with open(ifile, "rb") as fi, open(ofile, "w") as fo:
+    while read := fi.read(1):
         instruction = struct.unpack("B", read)[0]
-        testdata += "data=0x{:02X}\n".format(instruction)
-    f.close()
-
-with open(ofile, "w") as f:
-    f.write(testdata)
-    f.close()
-    
+        fo.write("data=0x{:02X}\n".format(instruction))
