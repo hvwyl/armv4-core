@@ -229,7 +229,7 @@ module armv4core (
     if_id if_id_0(
         .clk                (clk                                        ),
         .rst_n              (rst_n                                      ),
-        .en                 (en                                         ),
+        .en                 (en&(~hazard_bubble)&(~swp_hold)&(~ldm_hold)),
 
         .i_inst_vld         (~(hazard_id_flush)                         ),
         .o_inst_vld         (inst_vld                                   )
