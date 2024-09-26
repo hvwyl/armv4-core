@@ -4,14 +4,16 @@ module cpsr (
     input en,
 
     input [3:0]         i_nzcv,
-    output reg [3:0]    o_nzcv
+    output [3:0]        o_nzcv
 );
+    reg [3:0] nzcv;
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            o_nzcv <= 4'b0000;
+            nzcv <= 4'b0000;
         end
         else if (en) begin
-            o_nzcv <= i_nzcv;
+            nzcv <= i_nzcv;
         end
     end
+    assign o_nzcv = nzcv;
 endmodule
