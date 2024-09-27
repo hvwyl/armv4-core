@@ -34,7 +34,7 @@ module pc (
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            pc <= 32'b0000_0000;
+            pc <= 32'h0000_0000;
         end
         else if(en)begin
             pc <= pc_next;
