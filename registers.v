@@ -48,45 +48,30 @@ module registers (
     assign o_rs_reg = reg_output[i_rs_code];
     assign o_re_reg = reg_output[i_re_code];
 
-    wire rd_en_ex, rd_en_wb;
-    assign rd_en_ex = (i_rd_code_ex != 4'b1111)&i_rd_en_ex;
-    assign rd_en_wb = (i_rd_code_wb != 4'b1111)&i_rd_en_wb;
-
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
-            reg_stack[0] <= 'b0;
-            reg_stack[1] <= 'b0;
-            reg_stack[2] <= 'b0;
-            reg_stack[3] <= 'b0;
-            reg_stack[4] <= 'b0;
-            reg_stack[5] <= 'b0;
-            reg_stack[6] <= 'b0;
-            reg_stack[7] <= 'b0;
-            reg_stack[8] <= 'b0;
-            reg_stack[9] <= 'b0;
-            reg_stack[10] <= 'b0;
-            reg_stack[11] <= 'b0;
-            reg_stack[12] <= 'b0;
-            reg_stack[13] <= 'b0;
-            reg_stack[14] <= 'b0;
-        end
-        else begin
-            if (en) begin
-                if (rd_en_ex && rd_en_wb && (i_rd_code_ex == i_rd_code_wb)) begin
+    reg [31:0] reg_next [14:0];
+    generate
+        for (i = 0; i<15; i=i+1) begin
+            always @(*) begin
+                case ({(i_rd_code_ex == i)&i_rd_en_ex, (i_rd_code_wb == i)&i_rd_en_wb})
+                    2'b00: reg_next[i] <= reg_stack[i];
+                    2'b01: reg_next[i] <= i_rd_reg_wb;
+                    2'b10: reg_next[i] <= i_rd_reg_ex;
                     // write the same registers in parallel, use the value of the EX phase
-                    reg_stack[i_rd_code_ex] <= i_rd_reg_ex;
+                    2'b11: reg_next[i] <= i_rd_reg_ex;
+                endcase
+            end
+            always @(posedge clk or negedge rst_n) begin
+                if (!rst_n) begin
+                    reg_stack[i] <= 'b0;
                 end
                 else begin
-                    if (rd_en_ex) begin
-                        reg_stack[i_rd_code_ex] <= i_rd_reg_ex;
-                    end
-                    if (rd_en_wb) begin
-                        reg_stack[i_rd_code_wb] <= i_rd_reg_wb;
+                    if (en) begin
+                        reg_stack[i] <= reg_next[i];
                     end
                 end
             end
         end
-    end
+    endgenerate
 
     wire pc_en_ex, pc_en_wb;
     assign pc_en_ex = (i_rd_code_ex == 4'b1111)&i_rd_en_ex;
