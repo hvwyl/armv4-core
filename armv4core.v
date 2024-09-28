@@ -3,6 +3,11 @@ module armv4core (
     input rst_n,
     input en,
 
+    /* interrupt request */
+    input           i_irq,
+    input [31:0]    i_irq_r0,
+    input [31:0]    i_irq_r1,
+
     /* rom bus */
     output          o_rom_en,
     output [31:0]   o_rom_addr,
@@ -16,13 +21,20 @@ module armv4core (
     input [31:0]    i_ram_rdata,
     output [31:0]   o_ram_wdata
 );
+    wire            irq_flag                ;
     wire            pc_en                   ;
     wire [31:0]     pc_reg                  ;
     wire [31:0]     pc                      ;
     wire [31:0]     pc_next                 ;
+    wire            int_mode                ;
+    wire            irq_mask                ;
     wire [3:0]      nzcv                    ;
     wire [3:0]      nzcv_alu                ;
     wire [3:0]      nzcv_next               ;
+    wire            xpsr_en_ex              ;
+    wire            xpsr_sel                ;
+    wire [31:0]     xpsr_reg_msr            ;
+    wire [31:0]     xpsr_reg_mrs            ;
     wire [3:0]      rm_code                 ;
     wire [3:0]      rn_code                 ;
     wire [3:0]      rs_code                 ;
@@ -40,9 +52,12 @@ module armv4core (
     wire            hazard_ex_flush         ;
     wire            hazard_bubble           ;
 
+    wire            if_irq_flag             ;
+
     wire [31:0]     inst                    ;
     wire            inst_vld                ;
 
+    wire            id_irq_flag             ;
     wire [31:0]     id_op1                  ;
     wire [31:0]     id_op2                  ;
     wire [7:0]      id_shift                ;
@@ -60,11 +75,15 @@ module armv4core (
     wire            id_nzcv_flag            ;
     wire            id_is_swp               ;
     wire            id_is_ldm               ;
+    wire            id_is_mrs               ;
+    wire            id_is_msr               ;
     wire            id_ldm_p                ;
     wire            id_ldm_u                ;
+    wire            id_ldm_s                ;
     wire            id_ldm_l                ;
     wire [15:0]     id_ldm_reglist          ;
 
+    wire            ex_irq_flag             ;
     wire [31:0]     ex_op1                  ;
     wire [31:0]     ex_op2                  ;
     wire [7:0]      ex_shift                ;
@@ -82,6 +101,8 @@ module armv4core (
     wire            ex_nzcv_flag            ;
     wire            ex_is_swp               ;
     wire            ex_is_ldm               ;
+    wire            ex_is_mrs               ;
+    wire            ex_is_msr               ;
 
     wire [31:0]     ex_muxed_op1            ;
     wire [31:0]     ex_muxed_op2            ;
@@ -125,6 +146,7 @@ module armv4core (
     wire [31:0]     rd_reg_wb           ;
     
     wire            swp_hold            ;
+    wire            spsr_res            ;
     wire            ldm_hold            ;
     wire            ldm_flushreq        ;
     wire [31:0]     ldm_offset          ;
@@ -133,10 +155,23 @@ module armv4core (
     wire [31:0]     ldm_reg             ;
     wire [31:0]     ldm_reg_forwarded   ;
 
+    irq_ctrl irq_ctrl_0(
+        .clk                (clk                                        ),
+        .rst_n              (rst_n                                      ),
+        .en                 (en                                         ),
+        .i_irq              (i_irq                                      ),
+        .i_irq_mask         (irq_mask                                   ),
+        .i_irq_res          (ex_irq_flag                                ),
+        .o_irq_flag         (irq_flag                                   )
+    );
     pc pc_0(
         .clk                (clk                                        ),
         .rst_n              (rst_n                                      ),
         .en                 (en&(~hazard_bubble)&(~swp_hold)&(~ldm_hold)),
+
+        .i_irq_flag         (irq_flag                                   ),
+        .o_irq_flag         (if_irq_flag                                ),
+
         .i_pc_en            (pc_en                                      ),
         .i_pc_reg           (pc_reg                                     ),
         .o_pc               (pc                                         ),
@@ -146,6 +181,12 @@ module armv4core (
         .clk                (clk                                        ),
         .rst_n              (rst_n                                      ),
         .en                 (en                                         ),
+
+        .i_int_mode         (int_mode                                   ),
+
+        .i_irq_bak          ({irq_flag, if_irq_flag}                    ),
+        .i_irq_r0           (i_irq_r0                                   ),
+        .i_irq_r1           (i_irq_r1                                   ),
 
         .i_rm_code          (rm_code                                    ),
         .i_rn_code          (rn_code                                    ),
@@ -175,11 +216,22 @@ module armv4core (
         .rst_n              (rst_n                                      ),
         .en                 (en                                         ),
 
+        .i_spsr_bak         (irq_flag&ex_irq_flag                       ),
+        .i_spsr_res         (spsr_res                                    ),
+
+        .o_int_mode         (int_mode                                   ),
+
+        .o_irq_mask         (irq_mask                                   ),
+
         .i_nzcv_flag        (ex_nzcv_flag                               ),
         .i_nzcv_alu         (nzcv_alu                                   ),
 
         .o_nzcv             (nzcv                                       ),
-        .o_nzcv_next        (nzcv_next                                  )
+        .o_nzcv_next        (nzcv_next                                  ),
+        .i_xpsr_en_ex       (xpsr_en_ex                                 ),
+        .i_xpsr_sel         (xpsr_sel                                   ),
+        .i_xpsr_reg         (xpsr_reg_msr                               ),
+        .o_xpsr_reg         (xpsr_reg_mrs                               )
     );
     forward_ctrl forward_ctrl_0(
         .i_rd_en_ex         (rd_en_ex                                   ),
@@ -214,6 +266,8 @@ module armv4core (
         .o_re_reg           (ldm_reg_forwarded                          )
     );                      
     hazard_ctrl hazard_ctrl_0(
+        .i_irq_flag         (id_irq_flag                                ),
+
         .i_pc_en            (pc_en                                      ),
 
         .i_wb_rd_vld        (ex_muxed_wb_rd_vld                         ),
@@ -235,7 +289,9 @@ module armv4core (
         .rst_n              (rst_n                                      ),
         .en                 (en&(~hazard_bubble)&(~swp_hold)&(~ldm_hold)),
 
+        .i_irq_flag         (if_irq_flag&irq_flag                       ),
         .i_inst_vld         (~(hazard_id_flush)                         ),
+        .o_irq_flag         (id_irq_flag                                ),
         .o_inst_vld         (inst_vld                                   )
     );
     assign o_rom_en = en&(~hazard_bubble)&(~swp_hold)&(~ldm_hold);
@@ -277,9 +333,12 @@ module armv4core (
         .o_nzcv_flag        (id_nzcv_flag                               ),
         .o_is_swp           (id_is_swp                                  ),
         .o_is_ldm           (id_is_ldm                                  ),
+        .o_is_mrs           (id_is_mrs                                  ),
+        .o_is_msr           (id_is_msr                                  ),
 
         .o_ldm_p            (id_ldm_p                                   ),
         .o_ldm_u            (id_ldm_u                                   ),
+        .o_ldm_s            (id_ldm_s                                   ),
         .o_ldm_l            (id_ldm_l                                   ),
         .o_ldm_reglist      (id_ldm_reglist                             )
     );
@@ -288,6 +347,7 @@ module armv4core (
         .rst_n              (rst_n                                      ),
         .en                 (en&(~swp_hold)&(~ldm_hold)                 ),
 
+        .i_irq_flag         (irq_flag&id_irq_flag                       ),
         .i_op1              (id_op1                                     ),
         .i_op2              (id_op2                                     ),
         .i_shift            (id_shift                                   ),
@@ -305,7 +365,10 @@ module armv4core (
         .i_nzcv_flag        (id_nzcv_flag                               ),
         .i_is_swp           (id_is_swp                                  ),
         .i_is_ldm           (id_is_ldm                                  ),
+        .i_is_mrs           (id_is_mrs                                  ),
+        .i_is_msr           (id_is_msr                                  ),
 
+        .o_irq_flag         (ex_irq_flag                                ),
         .o_op1              (ex_op1                                     ),
         .o_op2              (ex_op2                                     ),
         .o_shift            (ex_shift                                   ),
@@ -322,7 +385,9 @@ module armv4core (
         .o_wb_rd_code       (ex_wb_rd_code                              ),
         .o_nzcv_flag        (ex_nzcv_flag                               ),
         .o_is_swp           (ex_is_swp                                  ),
-        .o_is_ldm           (ex_is_ldm                                  )
+        .o_is_ldm           (ex_is_ldm                                  ),
+        .o_is_mrs           (ex_is_mrs                                  ),
+        .o_is_msr           (ex_is_msr                                  )
     );
     swp_ctrl swp_ctrl_0(
         .clk                (clk                                        ),
@@ -339,8 +404,11 @@ module armv4core (
         .i_is_ldm           (id_is_ldm                                  ),
         .i_ldm_p            (id_ldm_p                                   ),
         .i_ldm_u            (id_ldm_u                                   ),
+        .i_ldm_s            (id_ldm_s                                   ),
         .i_ldm_l            (id_ldm_l                                   ),
         .i_reglist          (id_ldm_reglist                             ),
+
+        .o_spsr_res         (spsr_res                                    ),
 
         .o_ldm_hold         (ldm_hold                                   ),
         .o_ldm_flushreq     (ldm_flushreq                               ),
@@ -393,6 +461,11 @@ module armv4core (
         .i_nzcv             (nzcv                                       ),
         .o_nzcv_alu         (nzcv_alu                                   ),
 
+        .o_xpsr_en_ex       (xpsr_en_ex                                 ),
+        .o_xpsr_sel         (xpsr_sel                                   ),
+        .o_xpsr_reg         (xpsr_reg_msr                               ),
+        .i_xpsr_reg         (xpsr_reg_mrs                               ),
+
         .o_rd_en_ex         (rd_en_ex                                   ),
         .o_rd_code_ex       (rd_code_ex                                 ),
         .o_rd_reg_ex        (rd_reg_ex                                  ),
@@ -418,6 +491,9 @@ module armv4core (
         .i_rd_code          (ex_muxed_rd_code                           ),
         .i_wb_rd_vld        (ex_muxed_wb_rd_vld                         ),
         .i_wb_rd_code       (ex_muxed_wb_rd_code                        ),
+
+        .i_is_mrs           (ex_is_mrs                                  ),
+        .i_is_msr           (ex_is_msr                                  ),
     
         .o_wb_op            (ex_next_wb_op                              ),
         .o_wb_rd_src        (ex_next_wb_rd_src                          ),

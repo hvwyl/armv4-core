@@ -45,10 +45,13 @@ module id_stage (
     /* high-priority function control signals */
     output reg          o_is_swp,       // SWP instruction
     output reg          o_is_ldm,       // LDM instruction
+    output reg          o_is_mrs,       // MRS instruction
+    output reg          o_is_msr,       // MSR instruction
 
     /* to ldm_ctrl */
     output              o_ldm_p,
     output              o_ldm_u,
+    output              o_ldm_s,
     output              o_ldm_l,
     output [15:0]       o_ldm_reglist
 );
@@ -91,7 +94,9 @@ module id_stage (
         is_ldrsh0,
         is_ldrsh1,
         is_swp,
-        is_ldm;
+        is_ldm,
+        is_mrs,
+        is_msr;
     assign is_dp0 = ({i_inst[27:25],i_inst[4]}==4'b0000)&((i_inst[24:23]!=2'b10)|i_inst[20]);
     assign is_dp1 = ({i_inst[27:25],i_inst[7],i_inst[4]}==5'b00001) & ((i_inst[24:23]!=2'b10)|i_inst[20]);
     assign is_dp2 = (i_inst[27:25]==3'b001)&((i_inst[24:23]!=2'b10)|i_inst[20]);
@@ -106,7 +111,9 @@ module id_stage (
     assign is_ldrsh1 = ({i_inst[27:25],i_inst[22],i_inst[20],i_inst[7:4]}==9'b000_1_1_1111);
     assign is_swp = ({i_inst[27:23],i_inst[21:20],i_inst[11:4]}==15'b00010_00_00001001);
     assign is_ldm = (i_inst[27:25]==3'b100);
-    
+    assign is_mrs = ({i_inst[27:23],i_inst[21:20],i_inst[7],i_inst[4]}==9'b000100000);
+    assign is_msr = ({i_inst[27:23],i_inst[21:20],i_inst[7],i_inst[4]}==9'b000101000);
+
     /* regcode decode */
     // Rm is always i_inst[3:0]
     // Rn is always i_inst[19:16] or 4'b1111
@@ -155,13 +162,12 @@ module id_stage (
     assign {mem_p, mem_u, mem_b, mem_w, mem_l} = i_inst[24:20];
 
     /* ldm instruction decode */
-    wire ldm_p, ldm_u, ldm_w, ldm_l;
+    wire ldm_p, ldm_u, ldm_s, ldm_w, ldm_l;
     wire [15:0] ldm_reglist;
-    assign {ldm_p, ldm_u} = i_inst[24:23];
-    assign {ldm_w, ldm_l} = i_inst[21:20];
+    assign {ldm_p, ldm_u, ldm_s, ldm_w, ldm_l} = i_inst[24:20];
     assign ldm_reglist = i_inst[15:0];
 
-    assign {o_ldm_p, o_ldm_u, o_ldm_l, o_ldm_reglist} = {ldm_p, ldm_u, ldm_l, ldm_reglist};
+    assign {o_ldm_p, o_ldm_u, o_ldm_s, o_ldm_l, o_ldm_reglist} = {ldm_p, ldm_u, ldm_s, ldm_l, ldm_reglist};
 
     /* regcode router */
     always @(*) begin
@@ -310,6 +316,17 @@ module id_stage (
             o_rn_code_vld = 'b1;
             o_rs_code_vld = 'b0;
         end
+        else if (is_msr) begin
+            o_op1 = 32'b0;
+            o_op2 = i_rm_reg;
+            o_shift = 'b0;
+            o_shift_type = `SHIFT_NONE; // noshift
+            o_op3 = 'b0;
+            o_opcode = `ALU_ORR;
+            o_rm_code_vld = 'b1;
+            o_rn_code_vld = 'b0;
+            o_rs_code_vld = 'b0;
+        end
         else begin
             o_op1 = i_rn_reg;
             o_op2 = i_rm_reg;
@@ -403,6 +420,24 @@ module id_stage (
             o_wb_rd_vld = ldm_l;
             o_nzcv_flag = 'b0;
         end
+        else if (cond_vld && is_mrs) begin
+            o_mem_vld = 'b0;
+            o_mem_size = `MEM_W;
+            o_mem_sign = 'b0;
+            o_mem_addr_src = i_inst[22]; // Multiplexed mem_addr_src datapath in xpsr_sel
+            o_rd_vld = 'b1;
+            o_wb_rd_vld = 'b0;
+            o_nzcv_flag = 'b0;
+        end
+        else if (cond_vld && is_msr) begin
+            o_mem_vld = 'b0;
+            o_mem_size = `MEM_W;
+            o_mem_sign = 'b0;
+            o_mem_addr_src = i_inst[22]; // Multiplexed mem_addr_src datapath in xpsr_sel
+            o_rd_vld = 'b0;
+            o_wb_rd_vld = 'b0;
+            o_nzcv_flag = 'b0;
+        end
         else begin
             o_mem_vld = 'b0;
             o_mem_size = `MEM_W;
@@ -419,14 +454,32 @@ module id_stage (
         if (cond_vld && is_swp) begin
             o_is_swp = 'b1;
             o_is_ldm = 'b0;
+            o_is_mrs = 'b0;
+            o_is_msr = 'b0;
         end
         else if (cond_vld && is_ldm) begin
             o_is_swp = 'b0;
             o_is_ldm = 'b1;
+            o_is_mrs = 'b0;
+            o_is_msr = 'b0;
+        end
+        else if (cond_vld && is_mrs) begin
+            o_is_swp = 'b0;
+            o_is_ldm = 'b0;
+            o_is_mrs = 'b1;
+            o_is_msr = 'b0;
+        end
+        else if (cond_vld && is_msr) begin
+            o_is_swp = 'b0;
+            o_is_ldm = 'b0;
+            o_is_mrs = 'b0;
+            o_is_msr = 'b1;
         end
         else begin
             o_is_swp = 'b0;
             o_is_ldm = 'b0;
+            o_is_mrs = 'b0;
+            o_is_msr = 'b0;
         end
     end
 

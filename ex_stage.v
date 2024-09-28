@@ -4,6 +4,12 @@ module ex_stage (
     input [3:0]         i_nzcv,
     output [3:0]        o_nzcv_alu,
 
+    /* xPSR registers */
+    output              o_xpsr_en_ex,
+    output              o_xpsr_sel, // S=0: CPSR, S=1: SPSR
+    output [31:0]       o_xpsr_reg,
+    input [31:0]        i_xpsr_reg,
+
     /* to registers */
     output              o_rd_en_ex,
     output [3:0]        o_rd_code_ex,
@@ -32,6 +38,9 @@ module ex_stage (
     input [3:0]         i_rd_code,
     input               i_wb_rd_vld,
     input [3:0]         i_wb_rd_code,
+
+    input               i_is_mrs,
+    input               i_is_msr,
     
     /* to next pipeline */
     output [31:0]       o_wb_op,
@@ -64,10 +73,15 @@ module ex_stage (
         .o_result       (alu_result)
     );
 
+    /* to xPSR registers */
+    assign o_xpsr_en_ex = i_is_msr;
+    assign o_xpsr_sel = i_mem_addr_src; // Multiplexed mem_addr_src datapath in xpsr_sel
+    assign o_xpsr_reg = alu_result;
+
     /* to registers */
     assign o_rd_en_ex = i_rd_vld;
     assign o_rd_code_ex = i_rd_code;
-    assign o_rd_reg_ex = alu_result;
+    assign o_rd_reg_ex = i_is_mrs?i_xpsr_reg:alu_result;
     
     /* to mem ctrl */
     assign o_memctrl_vld = i_mem_vld;

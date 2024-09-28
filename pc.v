@@ -3,6 +3,9 @@ module pc (
     input rst_n,
     input en,
 
+    input               i_irq_flag,
+    output reg          o_irq_flag,
+
     /* write PC register input */
     input               i_pc_en,
     input [31:0]        i_pc_reg,
@@ -11,6 +14,15 @@ module pc (
     output [31:0]       o_pc,
     output [31:0]       o_pc_next
 );
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            o_irq_flag <= 'b0;
+        end
+        else if(en)begin
+            o_irq_flag <= i_irq_flag;
+        end
+    end
+
     reg [31:0] pc;
     reg [31:0] pc_next;
 
@@ -37,7 +49,12 @@ module pc (
             pc <= 32'h0000_0000;
         end
         else if(en)begin
-            pc <= pc_next;
+            if (i_irq_flag) begin
+                pc <= 32'h0000_0004;
+            end
+            else begin
+                pc <= pc_next;
+            end
         end
     end
     

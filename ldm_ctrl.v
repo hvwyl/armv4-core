@@ -6,8 +6,11 @@ module ldm_ctrl (
     input               i_is_ldm,
     input               i_ldm_p,    // P=0:A(After)     P=1:B(Before)
     input               i_ldm_u,    // U=0:D(Decrement) U=1:I(Increment)
+    input               i_ldm_s,    // S=0:None         S=1:Exception Return
     input               i_ldm_l,    // L=0:W(Write)     L=1:R(Read)
     input [15:0]        i_reglist,
+
+    output              o_spsr_res,
 
     output              o_ldm_hold,
     output              o_ldm_flushreq,
@@ -17,6 +20,7 @@ module ldm_ctrl (
 );
     reg ldm_p;
     reg ldm_u;
+    reg ldm_s;
     reg lpc_flag;
     reg [15:0] reglist_reg;
 
@@ -40,6 +44,7 @@ module ldm_ctrl (
 
     reg [4:0] cnt;
 
+    assign o_spsr_res = lpc_flag & (reglist_reg=='b0) & ldm_s;
     assign o_ldm_hold = ~(reglist_reg=='b0);
     assign o_ldm_flushreq = lpc_flag & (reglist_reg=='b0);
     assign o_ldm_offset = {25'd0, cnt, 2'd0};
@@ -51,6 +56,7 @@ module ldm_ctrl (
             cnt <= 'd0;
             ldm_p <= 'b0;
             ldm_u <= 'b0;
+            ldm_s <= 'b0;
             reglist_reg <= 'b0;
             lpc_flag <= 'b0;
         end
@@ -59,6 +65,7 @@ module ldm_ctrl (
                 cnt <= 'd0;
                 ldm_p <= i_ldm_p;
                 ldm_u <= i_ldm_u;
+                ldm_s <= i_ldm_s;
                 if (i_is_ldm) begin
                     reglist_reg <= i_reglist;
                     lpc_flag <= i_ldm_l & i_reglist[15]; // load PC register, need to flush pipeline

@@ -3,6 +3,7 @@ module id_ex (
     input rst_n,
     input en,
 
+    input               i_irq_flag,
     input [31:0]        i_op1,
     input [31:0]        i_op2,
     input [7:0]         i_shift,
@@ -20,7 +21,10 @@ module id_ex (
     input               i_nzcv_flag,
     input               i_is_swp,
     input               i_is_ldm,
+    input               i_is_mrs,
+    input               i_is_msr,
 
+    output reg          o_irq_flag,
     output reg [31:0]   o_op1,
     output reg [31:0]   o_op2,
     output reg [7:0]    o_shift,
@@ -37,11 +41,14 @@ module id_ex (
     output reg [3:0]    o_wb_rd_code,
     output reg          o_nzcv_flag,
     output reg          o_is_swp,
-    output reg          o_is_ldm
+    output reg          o_is_ldm,
+    output reg          o_is_mrs,
+    output reg          o_is_msr
 
 );
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
+            o_irq_flag      <= 'b0;
             o_op1           <= 'b0;
             o_op2           <= 'b0;
             o_shift         <= 'b0;
@@ -59,8 +66,11 @@ module id_ex (
             o_nzcv_flag     <= 'b0;
             o_is_swp        <= 'b0;
             o_is_ldm        <= 'b0;
+            o_is_mrs        <= 'b0;
+            o_is_msr        <= 'b0;
         end
         else if (en) begin
+            o_irq_flag      <= i_irq_flag      ;
             o_op1           <= i_op1           ;
             o_op2           <= i_op2           ;
             o_shift         <= i_shift         ;
@@ -78,6 +88,8 @@ module id_ex (
             o_nzcv_flag     <= i_nzcv_flag     ;
             o_is_swp        <= i_is_swp        ;
             o_is_ldm        <= i_is_ldm        ;
+            o_is_mrs        <= i_is_mrs        ;
+            o_is_msr        <= i_is_msr        ;
         end
     end
 endmodule

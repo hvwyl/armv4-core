@@ -1,4 +1,7 @@
 module hazard_ctrl (
+    /* interrupt request input (from EX phase) */
+    input i_irq_flag,
+
     /* write PC signal input */
     input i_pc_en,
 
@@ -32,6 +35,6 @@ module hazard_ctrl (
     assign hazard_b = i_pc_en;
 
     assign o_id_flush = hazard_b;
-    assign o_ex_flush = hazard_b||hazard_wb_b||hazard_data;
+    assign o_ex_flush = hazard_b||hazard_wb_b||hazard_data||i_irq_flag;
     assign o_bubble = hazard_data;
 endmodule
