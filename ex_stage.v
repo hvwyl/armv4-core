@@ -2,7 +2,7 @@
 module ex_stage (
     /* CPSR */
     input [3:0]         i_nzcv,
-    output [3:0]        o_nzcv,
+    output [3:0]        o_nzcv_alu,
 
     /* to registers */
     output              o_rd_en_ex,
@@ -32,7 +32,6 @@ module ex_stage (
     input [3:0]         i_rd_code,
     input               i_wb_rd_vld,
     input [3:0]         i_wb_rd_code,
-    input               i_nzcv_flag,
     
     /* to next pipeline */
     output [31:0]       o_wb_op,
@@ -46,7 +45,6 @@ module ex_stage (
     */
     wire [31:0] shift_result;
     wire shift_carry;
-    wire [3:0] alu_nzcv;
     wire [31:0] alu_result;
     shift_unit shift_unit_0(
         .i_op       (i_op2),
@@ -62,10 +60,9 @@ module ex_stage (
         .i_op1          (i_op1),
         .i_op2          (shift_result),
         .i_shift_carry  (shift_carry),
-        .o_nzcv         (alu_nzcv),
+        .o_nzcv         (o_nzcv_alu),
         .o_result       (alu_result)
     );
-    assign o_nzcv = i_nzcv_flag?alu_nzcv:i_nzcv;
 
     /* to registers */
     assign o_rd_en_ex = i_rd_vld;

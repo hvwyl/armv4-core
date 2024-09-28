@@ -21,6 +21,7 @@ module armv4core (
     wire [31:0]     pc                      ;
     wire [31:0]     pc_next                 ;
     wire [3:0]      nzcv                    ;
+    wire [3:0]      nzcv_alu                ;
     wire [3:0]      nzcv_next               ;
     wire [3:0]      rm_code                 ;
     wire [3:0]      rn_code                 ;
@@ -96,7 +97,6 @@ module armv4core (
     wire [3:0]      ex_muxed_rd_code        ;
     wire            ex_muxed_wb_rd_vld      ;
     wire [3:0]      ex_muxed_wb_rd_code     ;
-    wire            ex_muxed_nzcv_flag      ;
 
     wire            memctrl_vld             ;
     wire            memctrl_wr              ;
@@ -174,8 +174,12 @@ module armv4core (
         .clk                (clk                                        ),
         .rst_n              (rst_n                                      ),
         .en                 (en                                         ),
-        .i_nzcv             (nzcv_next                                  ),
-        .o_nzcv             (nzcv                                       )
+
+        .i_nzcv_flag        (ex_nzcv_flag                               ),
+        .i_nzcv_alu         (nzcv_alu                                   ),
+
+        .o_nzcv             (nzcv                                       ),
+        .o_nzcv_next        (nzcv_next                                  )
     );
     forward_ctrl forward_ctrl_0(
         .i_rd_en_ex         (rd_en_ex                                   ),
@@ -359,7 +363,6 @@ module armv4core (
         .i_rd_code          (ex_rd_code                                 ),
         .i_wb_rd_vld        (ex_wb_rd_vld                               ),
         .i_wb_rd_code       (ex_wb_rd_code                              ),
-        .i_nzcv_flag        (ex_nzcv_flag                               ),
 
         .o_op1              (ex_muxed_op1                               ),
         .o_op2              (ex_muxed_op2                               ),
@@ -375,7 +378,6 @@ module armv4core (
         .o_rd_code          (ex_muxed_rd_code                           ),
         .o_wb_rd_vld        (ex_muxed_wb_rd_vld                         ),
         .o_wb_rd_code       (ex_muxed_wb_rd_code                        ),
-        .o_nzcv_flag        (ex_muxed_nzcv_flag                         ),
 
         .i_is_swp           (ex_is_swp                                  ),
         .i_is_ldm           (ex_is_ldm                                  ),
@@ -389,7 +391,7 @@ module armv4core (
     );
     ex_stage ex_stage_0(
         .i_nzcv             (nzcv                                       ),
-        .o_nzcv             (nzcv_next                                  ),
+        .o_nzcv_alu         (nzcv_alu                                   ),
 
         .o_rd_en_ex         (rd_en_ex                                   ),
         .o_rd_code_ex       (rd_code_ex                                 ),
@@ -416,7 +418,6 @@ module armv4core (
         .i_rd_code          (ex_muxed_rd_code                           ),
         .i_wb_rd_vld        (ex_muxed_wb_rd_vld                         ),
         .i_wb_rd_code       (ex_muxed_wb_rd_code                        ),
-        .i_nzcv_flag        (ex_muxed_nzcv_flag                         ),
     
         .o_wb_op            (ex_next_wb_op                              ),
         .o_wb_rd_src        (ex_next_wb_rd_src                          ),

@@ -13,7 +13,6 @@ module ex_mux (
     input [3:0]         i_rd_code,
     input               i_wb_rd_vld,
     input [3:0]         i_wb_rd_code,
-    input               i_nzcv_flag,
 
     output [31:0]       o_op1,
     output reg [31:0]   o_op2,
@@ -29,7 +28,6 @@ module ex_mux (
     output [3:0]        o_rd_code,
     output reg          o_wb_rd_vld,
     output reg [3:0]    o_wb_rd_code,
-    output              o_nzcv_flag,
 
     /* high-priority function control signals */
     input               i_is_swp,       // SWP instruction
@@ -94,5 +92,4 @@ module ex_mux (
         end
     end
 
-    assign o_nzcv_flag      =   i_nzcv_flag     ;
 endmodule
