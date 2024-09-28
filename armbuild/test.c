@@ -10,5 +10,4 @@ void main()
 {
     int *p=(int *)0x4000;
     *p=fib(10);
-    while (1);
 }
