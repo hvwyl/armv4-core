@@ -80,34 +80,115 @@ module registers (
                     2'b11: reg_next[i] <= i_rd_reg_ex;
                 endcase
             end
-            always @(posedge clk or negedge rst_n) begin
-                if (!rst_n) begin
-                    reg_stack[i] <= 'b0;
-                    reg_stack_int[i] <= 'b0;
-                end
-                else begin
-                    if (en) begin
-                        if (!i_int_mode) begin
-                            reg_stack[i] <= reg_next[i];
-                            case (i_irq_bak)
-                                2'b00, 2'b01: begin
-                                    reg_stack_int[0] <= i_irq_r0;
-                                    reg_stack_int[1] <= i_irq_r1;
-                                end
-                                2'b10: begin
-                                    reg_stack_int[13] <= reg_next[13];
-                                    reg_stack_int[14] <= i_pc_next;
-                                end
-                                2'b11: begin
-                                    reg_stack_int[13] <= reg_next[13];
-                                    if (o_pc_en) begin
-                                        reg_stack_int[14] <= o_pc_reg;
-                                    end
-                                end
-                            endcase
+            if (0 == i) begin
+                always @(posedge clk or negedge rst_n) begin
+                    if (!rst_n) begin
+                        reg_stack[i] <= 'b0;
+                        reg_stack_int[i] <= 'b0;
+                    end
+                    else begin
+                        if (en) begin
+                            if (!i_int_mode) begin
+                                reg_stack[i] <= reg_next[i];
+                                case (i_irq_bak)
+                                    2'b00, 2'b01: reg_stack_int[0] <= i_irq_r0;
+                                    default: reg_stack_int[0] <= reg_stack_int[0];
+                                endcase
+                            end
+                            else begin
+                                reg_stack_int[i] <= reg_next[i];
+                            end
                         end
-                        else begin
-                            reg_stack_int[i] <= reg_next[i];
+                    end
+                end
+            end
+            else if (1 == i) begin
+                always @(posedge clk or negedge rst_n) begin
+                    if (!rst_n) begin
+                        reg_stack[i] <= 'b0;
+                        reg_stack_int[i] <= 'b0;
+                    end
+                    else begin
+                        if (en) begin
+                            if (!i_int_mode) begin
+                                reg_stack[i] <= reg_next[i];
+                                case (i_irq_bak)
+                                    2'b00, 2'b01: reg_stack_int[1] <= i_irq_r1;
+                                    default: reg_stack_int[1] <= reg_stack_int[1];
+                                endcase
+                            end
+                            else begin
+                                reg_stack_int[i] <= reg_next[i];
+                            end
+                        end
+                    end
+                end
+            end
+            else if (13 == i) begin
+                always @(posedge clk or negedge rst_n) begin
+                    if (!rst_n) begin
+                        reg_stack[i] <= 'b0;
+                        reg_stack_int[i] <= 'b0;
+                    end
+                    else begin
+                        if (en) begin
+                            if (!i_int_mode) begin
+                                reg_stack[i] <= reg_next[i];
+                                case (i_irq_bak)
+                                    2'b10, 2'b11: reg_stack_int[13] <= reg_next[13];
+                                    default: reg_stack_int[13] <= reg_stack_int[13];
+                                endcase
+                            end
+                            else begin
+                                reg_stack_int[i] <= reg_next[i];
+                            end
+                        end
+                    end
+                end
+            end
+            else if (14 == i) begin
+                always @(posedge clk or negedge rst_n) begin
+                    if (!rst_n) begin
+                        reg_stack[i] <= 'b0;
+                        reg_stack_int[i] <= 'b0;
+                    end
+                    else begin
+                        if (en) begin
+                            if (!i_int_mode) begin
+                                reg_stack[i] <= reg_next[i];
+                                case (i_irq_bak)
+                                    2'b10: begin
+                                        reg_stack_int[14] <= i_pc_next;
+                                    end
+                                    2'b11: begin
+                                        if (o_pc_en) begin
+                                            reg_stack_int[14] <= o_pc_reg;
+                                        end
+                                    end
+                                    default: reg_stack_int[14] <= reg_stack_int[14];
+                                endcase
+                            end
+                            else begin
+                                reg_stack_int[i] <= reg_next[i];
+                            end
+                        end
+                    end
+                end
+            end
+            else begin
+                always @(posedge clk or negedge rst_n) begin
+                    if (!rst_n) begin
+                        reg_stack[i] <= 'b0;
+                        reg_stack_int[i] <= 'b0;
+                    end
+                    else begin
+                        if (en) begin
+                            if (!i_int_mode) begin
+                                reg_stack[i] <= reg_next[i];
+                            end
+                            else begin
+                                reg_stack_int[i] <= reg_next[i];
+                            end
                         end
                     end
                 end
