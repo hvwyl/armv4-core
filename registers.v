@@ -63,6 +63,10 @@ module registers (
     assign o_pc_en = pc_en_ex|pc_en_wb;
     assign o_pc_reg = pc_en_wb?(i_rd_reg_wb):(i_rd_reg_ex);
 
+    wire [31:0] reg_irq [1:0];
+    assign reg_irq[0] = i_irq_r0;
+    assign reg_irq[1] = i_irq_r1;
+
     reg [31:0] reg_next [14:0];
     generate
         for (i = 0; i<15; i=i+1) begin
@@ -80,7 +84,7 @@ module registers (
                     2'b11: reg_next[i] <= i_rd_reg_ex;
                 endcase
             end
-            if (0 == i) begin
+            if ((0 == i) || (1 == i)) begin
                 always @(posedge clk or negedge rst_n) begin
                     if (!rst_n) begin
                         reg_stack[i] <= 'b0;
@@ -91,30 +95,8 @@ module registers (
                             if (!i_int_mode) begin
                                 reg_stack[i] <= reg_next[i];
                                 case (i_irq_bak)
-                                    2'b00, 2'b01: reg_stack_int[0] <= i_irq_r0;
-                                    default: reg_stack_int[0] <= reg_stack_int[0];
-                                endcase
-                            end
-                            else begin
-                                reg_stack_int[i] <= reg_next[i];
-                            end
-                        end
-                    end
-                end
-            end
-            else if (1 == i) begin
-                always @(posedge clk or negedge rst_n) begin
-                    if (!rst_n) begin
-                        reg_stack[i] <= 'b0;
-                        reg_stack_int[i] <= 'b0;
-                    end
-                    else begin
-                        if (en) begin
-                            if (!i_int_mode) begin
-                                reg_stack[i] <= reg_next[i];
-                                case (i_irq_bak)
-                                    2'b00, 2'b01: reg_stack_int[1] <= i_irq_r1;
-                                    default: reg_stack_int[1] <= reg_stack_int[1];
+                                    2'b00, 2'b01: reg_stack_int[i] <= reg_irq[i];
+                                    default: reg_stack_int[i] <= reg_stack_int[i];
                                 endcase
                             end
                             else begin
