@@ -29,4 +29,4 @@ for (opt, arg) in opts:
 with open(ifile, "rb") as fi, open(ofile, "w") as fo:
     while read := fi.read(1):
         instruction = struct.unpack("B", read)[0]
-        fo.write("data=0x{:02X}\n".format(instruction))
+        fo.write("{:02X}\n".format(instruction))

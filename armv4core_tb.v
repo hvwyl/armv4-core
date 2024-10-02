@@ -64,15 +64,8 @@ end
 reg [7:0] ram [`TB_RAM_SIZE-1:0];
 
 /* load ram from file */
-integer i;
-integer file;
 initial begin
-    i = 0;
-    file = $fopen("armbuild/build.txt", "r");
-    while (!$feof(file)) begin
-        $fscanf(file, "data=%X", ram[i]);
-        i = i+1;
-    end
+    $readmemh("armbuild/build.txt", ram, 'h0000_0000);
 end
 
 /* rom interface */
