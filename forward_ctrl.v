@@ -22,7 +22,16 @@ module forward_ctrl (
     /* register output */
     output reg [31:0]   o_rm_reg,
     output reg [31:0]   o_rn_reg,
-    output reg [31:0]   o_rs_reg
+    output reg [31:0]   o_rs_reg,
+
+    /* register code input (from EX phase) */
+    input [3:0]         i_re_code,
+
+    /* register input (from EX phase) */
+    input [31:0]        i_re_reg,
+
+    /* register output (from EX phase) */
+    output reg [31:0]   o_re_reg
 );
     /*
         forward ctrl
@@ -50,5 +59,16 @@ module forward_ctrl (
             2'b10: o_rs_reg = i_rd_reg_ex;
             2'b11: o_rs_reg = i_rd_reg_ex;
         endcase
+    end
+    /*
+        EX phase: bypass the value of the WB phase
+    */
+    always @(*) begin
+        if (i_rd_en_wb & (i_rd_code_wb == i_re_code)) begin
+            o_re_reg = i_rd_reg_wb;
+        end
+        else begin
+            o_re_reg = i_re_reg;
+        end
     end
 endmodule

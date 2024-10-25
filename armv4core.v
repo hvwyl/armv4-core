@@ -252,19 +252,14 @@ module armv4core (
 
         .o_rm_reg           (rm_reg_forwarded                           ),
         .o_rn_reg           (rn_reg_forwarded                           ),
-        .o_rs_reg           (rs_reg_forwarded                           )
-    );
-    forward_ex_ctrl forward_ex_ctrl_0(
-        .i_rd_en_wb         (rd_en_wb                                   ),
-        .i_rd_code_wb       (rd_code_wb                                 ),
-        .i_rd_reg_wb        (rd_reg_wb                                  ),
+        .o_rs_reg           (rs_reg_forwarded                           ),
 
         .i_re_code          (ldm_reg_code                               ),
 
         .i_re_reg           (ldm_reg                                    ),
 
         .o_re_reg           (ldm_reg_forwarded                          )
-    );                      
+    );
     hazard_ctrl hazard_ctrl_0(
         .i_irq_flag         (id_irq_flag                                ),
 
