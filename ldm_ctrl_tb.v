@@ -17,7 +17,7 @@ initial begin
     $finish();
 end
 
-reg is_ldm, p, u, l;
+reg ldm_vld, p, u, l;
 reg [15:0] reglist;
 wire hold;
 wire flushreq;
@@ -32,7 +32,7 @@ initial begin
     forever @ (negedge clk) begin
         if (!hold) begin
             if (i<8) begin
-                is_ldm <= 1'b1;
+                ldm_vld <= 1'b1;
                 p <= $random;
                 u <= $random;
                 l <= $random;
@@ -40,11 +40,11 @@ initial begin
                 i <= i+1;
             end
             else begin
-                is_ldm <= 1'b0;
+                ldm_vld <= 1'b0;
             end
         end
         else begin
-            is_ldm <= 1'b0;
+            ldm_vld <= 1'b0;
         end
     end
 end
@@ -54,7 +54,7 @@ ldm_ctrl ldm_ctrl_0(
     .rst_n              (rst_n),
     .en                 (1'b1),
 
-    .i_is_ldm           (is_ldm),
+    .i_ldm_vld          (ldm_vld),
     .i_ldm_p            (p),
     .i_ldm_u            (u),
     .i_ldm_l            (l),

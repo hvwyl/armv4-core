@@ -39,8 +39,8 @@ module ex_stage (
     input               i_wb_rd_vld,
     input [3:0]         i_wb_rd_code,
 
-    input               i_is_mrs,
-    input               i_is_msr,
+    input               i_mrs_vld,
+    input               i_msr_vld,
     
     /* to next pipeline */
     output [31:0]       o_wb_op,
@@ -74,14 +74,14 @@ module ex_stage (
     );
 
     /* to xPSR registers */
-    assign o_xpsr_en_ex = i_is_msr;
+    assign o_xpsr_en_ex = i_msr_vld;
     assign o_xpsr_sel = i_mem_addr_src; // Multiplexed mem_addr_src datapath in xpsr_sel
     assign o_xpsr_reg = alu_result;
 
     /* to registers */
     assign o_rd_en_ex = i_rd_vld;
     assign o_rd_code_ex = i_rd_code;
-    assign o_rd_reg_ex = i_is_mrs?i_xpsr_reg:alu_result;
+    assign o_rd_reg_ex = i_mrs_vld?i_xpsr_reg:alu_result;
     
     /* to mem ctrl */
     assign o_memctrl_vld = i_mem_vld;

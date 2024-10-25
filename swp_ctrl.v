@@ -2,7 +2,7 @@ module swp_ctrl (
     input clk,
     input rst_n,
     input en,
-    input       i_is_swp,
+    input       i_swp_vld,
     output reg  o_swp_hold
 );
     always @(posedge clk or negedge rst_n) begin
@@ -14,7 +14,7 @@ module swp_ctrl (
                 o_swp_hold <= 'b0;
             end
             else begin
-                o_swp_hold <= i_is_swp;
+                o_swp_hold <= i_swp_vld;
             end
         end
     end

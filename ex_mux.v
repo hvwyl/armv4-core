@@ -30,8 +30,8 @@ module ex_mux (
     output reg [3:0]    o_wb_rd_code,
 
     /* high-priority function control signals */
-    input               i_is_swp,       // SWP instruction
-    input               i_is_ldm,       // LDM instruction
+    input               i_swp_vld,       // SWP instruction
+    input               i_ldm_vld,       // LDM instruction
 
     /* from swp ctrl */
     input               i_swp_hold,
@@ -44,7 +44,7 @@ module ex_mux (
 );
     assign o_op1            =   i_op1           ;
     always @(*) begin
-        if (i_is_ldm) begin
+        if (i_ldm_vld) begin
             o_op2           =   i_ldm_offset    ;
         end
         else begin
@@ -54,7 +54,7 @@ module ex_mux (
     assign o_shift          =   i_shift         ;
     assign o_shift_type     =   i_shift_type    ;
     always @(*) begin
-        if (i_is_ldm) begin
+        if (i_ldm_vld) begin
             o_op3           =   i_ldm_reg       ;
         end
         else begin
@@ -64,7 +64,7 @@ module ex_mux (
     assign o_opcode         =   i_opcode        ;
 
     always @(*) begin
-        if (i_is_ldm) begin
+        if (i_ldm_vld) begin
             o_mem_vld       =   i_ldm_mem_vld   ;
         end
         else begin
@@ -77,14 +77,14 @@ module ex_mux (
     assign o_rd_vld         =   i_rd_vld        ;
     assign o_rd_code        =   i_rd_code       ;
     always @(*) begin
-        case ({i_is_swp, i_is_ldm})
+        case ({i_swp_vld, i_ldm_vld})
             'b10: o_wb_rd_vld = i_swp_hold;
             'b01: o_wb_rd_vld = i_ldm_mem_vld&i_wb_rd_vld;
             default: o_wb_rd_vld = i_wb_rd_vld;
         endcase
     end
     always @(*) begin
-        if (i_is_ldm) begin
+        if (i_ldm_vld) begin
             o_wb_rd_code    =   i_ldm_reg_code  ;
         end
         else begin

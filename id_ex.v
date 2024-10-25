@@ -19,10 +19,10 @@ module id_ex (
     input               i_wb_rd_vld,
     input [3:0]         i_wb_rd_code,
     input               i_nzcv_flag,
-    input               i_is_swp,
-    input               i_is_ldm,
-    input               i_is_mrs,
-    input               i_is_msr,
+    input               i_swp_vld,
+    input               i_ldm_vld,
+    input               i_mrs_vld,
+    input               i_msr_vld,
 
     output reg          o_irq_flag,
     output reg [31:0]   o_op1,
@@ -40,10 +40,10 @@ module id_ex (
     output reg          o_wb_rd_vld,
     output reg [3:0]    o_wb_rd_code,
     output reg          o_nzcv_flag,
-    output reg          o_is_swp,
-    output reg          o_is_ldm,
-    output reg          o_is_mrs,
-    output reg          o_is_msr
+    output reg          o_swp_vld,
+    output reg          o_ldm_vld,
+    output reg          o_mrs_vld,
+    output reg          o_msr_vld
 
 );
     always @(posedge clk or negedge rst_n) begin
@@ -64,10 +64,10 @@ module id_ex (
             o_wb_rd_vld     <= 'b0;
             o_wb_rd_code    <= 'b0;
             o_nzcv_flag     <= 'b0;
-            o_is_swp        <= 'b0;
-            o_is_ldm        <= 'b0;
-            o_is_mrs        <= 'b0;
-            o_is_msr        <= 'b0;
+            o_swp_vld       <= 'b0;
+            o_ldm_vld       <= 'b0;
+            o_mrs_vld       <= 'b0;
+            o_msr_vld       <= 'b0;
         end
         else if (en) begin
             o_irq_flag      <= i_irq_flag      ;
@@ -86,10 +86,10 @@ module id_ex (
             o_wb_rd_vld     <= i_wb_rd_vld     ;
             o_wb_rd_code    <= i_wb_rd_code    ;
             o_nzcv_flag     <= i_nzcv_flag     ;
-            o_is_swp        <= i_is_swp        ;
-            o_is_ldm        <= i_is_ldm        ;
-            o_is_mrs        <= i_is_mrs        ;
-            o_is_msr        <= i_is_msr        ;
+            o_swp_vld       <= i_swp_vld       ;
+            o_ldm_vld       <= i_ldm_vld       ;
+            o_mrs_vld       <= i_mrs_vld       ;
+            o_msr_vld       <= i_msr_vld       ;
         end
     end
 endmodule

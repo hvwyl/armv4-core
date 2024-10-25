@@ -3,7 +3,7 @@ module ldm_ctrl (
     input rst_n,
     input en,
 
-    input               i_is_ldm,
+    input               i_ldm_vld,
     input               i_ldm_p,    // P=0:A(After)     P=1:B(Before)
     input               i_ldm_u,    // U=0:D(Decrement) U=1:I(Increment)
     input               i_ldm_s,    // S=0:None         S=1:Exception Return
@@ -66,7 +66,7 @@ module ldm_ctrl (
                 ldm_p <= i_ldm_p;
                 ldm_u <= i_ldm_u;
                 ldm_s <= i_ldm_s;
-                if (i_is_ldm) begin
+                if (i_ldm_vld) begin
                     reglist_reg <= i_reglist;
                     lpc_flag <= i_ldm_l & i_reglist[15]; // load PC register, need to flush pipeline
                 end

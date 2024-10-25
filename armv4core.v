@@ -73,10 +73,10 @@ module armv4core (
     wire            id_wb_rd_vld            ;
     wire [3:0]      id_wb_rd_code           ;
     wire            id_nzcv_flag            ;
-    wire            id_is_swp               ;
-    wire            id_is_ldm               ;
-    wire            id_is_mrs               ;
-    wire            id_is_msr               ;
+    wire            id_swp_vld              ;
+    wire            id_ldm_vld              ;
+    wire            id_mrs_vld              ;
+    wire            id_msr_vld              ;
     wire            id_ldm_p                ;
     wire            id_ldm_u                ;
     wire            id_ldm_s                ;
@@ -99,10 +99,10 @@ module armv4core (
     wire            ex_wb_rd_vld            ;
     wire [3:0]      ex_wb_rd_code           ;
     wire            ex_nzcv_flag            ;
-    wire            ex_is_swp               ;
-    wire            ex_is_ldm               ;
-    wire            ex_is_mrs               ;
-    wire            ex_is_msr               ;
+    wire            ex_swp_vld              ;
+    wire            ex_ldm_vld              ;
+    wire            ex_mrs_vld              ;
+    wire            ex_msr_vld              ;
 
     wire [31:0]     ex_muxed_op1            ;
     wire [31:0]     ex_muxed_op2            ;
@@ -331,10 +331,10 @@ module armv4core (
         .o_wb_rd_vld        (id_wb_rd_vld                               ),
         .o_wb_rd_code       (id_wb_rd_code                              ),
         .o_nzcv_flag        (id_nzcv_flag                               ),
-        .o_is_swp           (id_is_swp                                  ),
-        .o_is_ldm           (id_is_ldm                                  ),
-        .o_is_mrs           (id_is_mrs                                  ),
-        .o_is_msr           (id_is_msr                                  ),
+        .o_swp_vld          (id_swp_vld                                 ),
+        .o_ldm_vld          (id_ldm_vld                                 ),
+        .o_mrs_vld          (id_mrs_vld                                 ),
+        .o_msr_vld          (id_msr_vld                                 ),
 
         .o_ldm_p            (id_ldm_p                                   ),
         .o_ldm_u            (id_ldm_u                                   ),
@@ -363,10 +363,10 @@ module armv4core (
         .i_wb_rd_vld        (id_wb_rd_vld                               ),
         .i_wb_rd_code       (id_wb_rd_code                              ),
         .i_nzcv_flag        (id_nzcv_flag                               ),
-        .i_is_swp           (id_is_swp                                  ),
-        .i_is_ldm           (id_is_ldm                                  ),
-        .i_is_mrs           (id_is_mrs                                  ),
-        .i_is_msr           (id_is_msr                                  ),
+        .i_swp_vld          (id_swp_vld                                 ),
+        .i_ldm_vld          (id_ldm_vld                                 ),
+        .i_mrs_vld          (id_mrs_vld                                 ),
+        .i_msr_vld          (id_msr_vld                                 ),
 
         .o_irq_flag         (ex_irq_flag                                ),
         .o_op1              (ex_op1                                     ),
@@ -384,16 +384,16 @@ module armv4core (
         .o_wb_rd_vld        (ex_wb_rd_vld                               ),
         .o_wb_rd_code       (ex_wb_rd_code                              ),
         .o_nzcv_flag        (ex_nzcv_flag                               ),
-        .o_is_swp           (ex_is_swp                                  ),
-        .o_is_ldm           (ex_is_ldm                                  ),
-        .o_is_mrs           (ex_is_mrs                                  ),
-        .o_is_msr           (ex_is_msr                                  )
+        .o_swp_vld          (ex_swp_vld                                 ),
+        .o_ldm_vld          (ex_ldm_vld                                 ),
+        .o_mrs_vld          (ex_mrs_vld                                 ),
+        .o_msr_vld          (ex_msr_vld                                 )
     );
     swp_ctrl swp_ctrl_0(
         .clk                (clk                                        ),
         .rst_n              (rst_n                                      ),
         .en                 (en                                         ),
-        .i_is_swp           (id_is_swp                                  ),
+        .i_swp_vld          (id_swp_vld                                 ),
         .o_swp_hold         (swp_hold                                   )
     );
     ldm_ctrl ldm_ctrl_0(
@@ -401,7 +401,7 @@ module armv4core (
         .rst_n              (rst_n                                      ),
         .en                 (en                                         ),
 
-        .i_is_ldm           (id_is_ldm                                  ),
+        .i_ldm_vld          (id_ldm_vld                                 ),
         .i_ldm_p            (id_ldm_p                                   ),
         .i_ldm_u            (id_ldm_u                                   ),
         .i_ldm_s            (id_ldm_s                                   ),
@@ -447,8 +447,8 @@ module armv4core (
         .o_wb_rd_vld        (ex_muxed_wb_rd_vld                         ),
         .o_wb_rd_code       (ex_muxed_wb_rd_code                        ),
 
-        .i_is_swp           (ex_is_swp                                  ),
-        .i_is_ldm           (ex_is_ldm                                  ),
+        .i_swp_vld          (ex_swp_vld                                 ),
+        .i_ldm_vld          (ex_ldm_vld                                 ),
 
         .i_swp_hold         (swp_hold                                   ),
 
@@ -492,8 +492,8 @@ module armv4core (
         .i_wb_rd_vld        (ex_muxed_wb_rd_vld                         ),
         .i_wb_rd_code       (ex_muxed_wb_rd_code                        ),
 
-        .i_is_mrs           (ex_is_mrs                                  ),
-        .i_is_msr           (ex_is_msr                                  ),
+        .i_mrs_vld          (ex_mrs_vld                                 ),
+        .i_msr_vld          (ex_msr_vld                                 ),
     
         .o_wb_op            (ex_next_wb_op                              ),
         .o_wb_rd_src        (ex_next_wb_rd_src                          ),

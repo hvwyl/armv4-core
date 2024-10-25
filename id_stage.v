@@ -43,10 +43,10 @@ module id_stage (
     output reg          o_nzcv_flag,
     
     /* high-priority function control signals */
-    output reg          o_is_swp,       // SWP instruction
-    output reg          o_is_ldm,       // LDM instruction
-    output reg          o_is_mrs,       // MRS instruction
-    output reg          o_is_msr,       // MSR instruction
+    output reg          o_swp_vld,      // SWP instruction
+    output reg          o_ldm_vld,      // LDM instruction
+    output reg          o_mrs_vld,      // MRS instruction
+    output reg          o_msr_vld,      // MSR instruction
 
     /* to ldm_ctrl */
     output              o_ldm_p,
@@ -452,34 +452,34 @@ module id_stage (
     /* high-priority function control signals */
     always @(*) begin
         if (cond_vld && is_swp) begin
-            o_is_swp = 'b1;
-            o_is_ldm = 'b0;
-            o_is_mrs = 'b0;
-            o_is_msr = 'b0;
+            o_swp_vld = 'b1;
+            o_ldm_vld = 'b0;
+            o_mrs_vld = 'b0;
+            o_msr_vld = 'b0;
         end
         else if (cond_vld && is_ldm) begin
-            o_is_swp = 'b0;
-            o_is_ldm = 'b1;
-            o_is_mrs = 'b0;
-            o_is_msr = 'b0;
+            o_swp_vld = 'b0;
+            o_ldm_vld = 'b1;
+            o_mrs_vld = 'b0;
+            o_msr_vld = 'b0;
         end
         else if (cond_vld && is_mrs) begin
-            o_is_swp = 'b0;
-            o_is_ldm = 'b0;
-            o_is_mrs = 'b1;
-            o_is_msr = 'b0;
+            o_swp_vld = 'b0;
+            o_ldm_vld = 'b0;
+            o_mrs_vld = 'b1;
+            o_msr_vld = 'b0;
         end
         else if (cond_vld && is_msr) begin
-            o_is_swp = 'b0;
-            o_is_ldm = 'b0;
-            o_is_mrs = 'b0;
-            o_is_msr = 'b1;
+            o_swp_vld = 'b0;
+            o_ldm_vld = 'b0;
+            o_mrs_vld = 'b0;
+            o_msr_vld = 'b1;
         end
         else begin
-            o_is_swp = 'b0;
-            o_is_ldm = 'b0;
-            o_is_mrs = 'b0;
-            o_is_msr = 'b0;
+            o_swp_vld = 'b0;
+            o_ldm_vld = 'b0;
+            o_mrs_vld = 'b0;
+            o_msr_vld = 'b0;
         end
     end
 
