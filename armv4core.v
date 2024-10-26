@@ -160,6 +160,7 @@ module armv4core (
 
         .i_pc_en            (pc_en                                      ),
         .i_pc_reg           (pc_reg                                     ),
+        .i_pc_irq           (irq_flag&ex_irq_flag                       ),
         .o_pc               (pc                                         ),
         .o_pc_next          (pc_next                                    )
     );

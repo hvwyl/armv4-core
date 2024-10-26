@@ -9,6 +9,7 @@ module pc (
     /* write PC register input */
     input               i_pc_en,
     input [31:0]        i_pc_reg,
+    input               i_pc_irq,
 
     /* PC register output */
     output [31:0]       o_pc,
@@ -49,7 +50,7 @@ module pc (
             pc <= 32'h0000_0000;
         end
         else if(en)begin
-            if (i_irq_flag) begin
+            if (i_pc_irq) begin
                 pc <= 32'h0000_0004;
             end
             else begin
