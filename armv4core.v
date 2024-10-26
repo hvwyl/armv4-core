@@ -54,6 +54,7 @@ module armv4core (
     wire            hazard_id_flush         ;
     wire            hazard_ex_flush         ;
     wire            hazard_bubble           ;
+    wire            hazard_pipelinehold     ;
 
     wire            if_irq_flag             ;
 
@@ -152,7 +153,7 @@ module armv4core (
     pc pc_0(
         .clk                (clk                                        ),
         .rst_n              (rst_n                                      ),
-        .en                 (en&(~hazard_bubble)&(~swp_hold)&(~ldm_hold)),
+        .en                 (en&(~hazard_bubble)&(~hazard_pipelinehold) ),
 
         .i_irq_flag         (irq_flag                                   ),
         .o_irq_flag         (if_irq_flag                                ),
@@ -260,21 +261,25 @@ module armv4core (
         .i_rn_code_vld      (rn_code_vld                                ),
         .i_rs_code_vld      (rs_code_vld                                ),
 
+        .i_swp_hold         (swp_hold                                   ),
+        .i_ldm_hold         (ldm_hold                                   ),
+
         .o_id_flush         (hazard_id_flush                            ),
         .o_ex_flush         (hazard_ex_flush                            ),
-        .o_bubble           (hazard_bubble                              )
+        .o_bubble           (hazard_bubble                              ),
+        .o_pipelinehold     (hazard_pipelinehold                        )
     );
     if_id if_id_0(
         .clk                (clk                                        ),
         .rst_n              (rst_n                                      ),
-        .en                 (en&(~hazard_bubble)&(~swp_hold)&(~ldm_hold)),
+        .en                 (en&(~hazard_bubble)&(~hazard_pipelinehold) ),
 
         .i_irq_flag         (if_irq_flag&irq_flag                       ),
         .i_inst_vld         (~(hazard_id_flush)                         ),
         .o_irq_flag         (id_irq_flag                                ),
         .o_inst_vld         (inst_vld                                   )
     );
-    assign o_rom_en = en&(~hazard_bubble)&(~swp_hold)&(~ldm_hold);
+    assign o_rom_en = en&(~hazard_bubble)&(~hazard_pipelinehold);
     assign o_rom_addr = pc;
     assign inst = i_rom_data;
     id_stage id_stage_0(
@@ -325,7 +330,7 @@ module armv4core (
     id_ex id_ex_0(
         .clk                (clk                                        ),
         .rst_n              (rst_n                                      ),
-        .en                 (en&(~swp_hold)&(~ldm_hold)                 ),
+        .en                 (en&(~hazard_pipelinehold)                  ),
 
         .i_irq_flag         (irq_flag&id_irq_flag                       ),
         .i_op1              (id_op1                                     ),
