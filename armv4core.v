@@ -38,15 +38,18 @@ module armv4core (
     wire [3:0]      rm_code                 ;
     wire [3:0]      rn_code                 ;
     wire [3:0]      rs_code                 ;
+    wire [3:0]      re_code                 ;
     wire            rm_code_vld             ;
     wire            rn_code_vld             ;
     wire            rs_code_vld             ;
     wire [31:0]     rm_reg                  ;
     wire [31:0]     rn_reg                  ;
     wire [31:0]     rs_reg                  ;
+    wire [31:0]     re_reg                  ;
     wire [31:0]     rm_reg_forwarded        ;
     wire [31:0]     rn_reg_forwarded        ;
     wire [31:0]     rs_reg_forwarded        ;
+    wire [31:0]     re_reg_forwarded        ;
 
     wire            hazard_id_flush         ;
     wire            hazard_ex_flush         ;
@@ -151,9 +154,6 @@ module armv4core (
     wire            ldm_flushreq        ;
     wire [31:0]     ldm_offset          ;
     wire            ldm_mem_vld         ;
-    wire [3:0]      ldm_reg_code        ;
-    wire [31:0]     ldm_reg             ;
-    wire [31:0]     ldm_reg_forwarded   ;
 
     irq_ctrl irq_ctrl_0(
         .clk                (clk                                        ),
@@ -191,12 +191,12 @@ module armv4core (
         .i_rm_code          (rm_code                                    ),
         .i_rn_code          (rn_code                                    ),
         .i_rs_code          (rs_code                                    ),
-        .i_re_code          (ldm_reg_code                               ),
+        .i_re_code          (re_code                                    ),
 
         .o_rm_reg           (rm_reg                                     ),
         .o_rn_reg           (rn_reg                                     ),
         .o_rs_reg           (rs_reg                                     ),
-        .o_re_reg           (ldm_reg                                    ),
+        .o_re_reg           (re_reg                                     ),
 
         .o_pc_en            (pc_en                                      ),
         .o_pc_reg           (pc_reg                                     ),
@@ -254,11 +254,11 @@ module armv4core (
         .o_rn_reg           (rn_reg_forwarded                           ),
         .o_rs_reg           (rs_reg_forwarded                           ),
 
-        .i_re_code          (ldm_reg_code                               ),
+        .i_re_code          (re_code                                    ),
 
-        .i_re_reg           (ldm_reg                                    ),
+        .i_re_reg           (re_reg                                     ),
 
-        .o_re_reg           (ldm_reg_forwarded                          )
+        .o_re_reg           (re_reg_forwarded                           )
     );
     hazard_ctrl hazard_ctrl_0(
         .i_irq_flag         (id_irq_flag                                ),
@@ -409,7 +409,7 @@ module armv4core (
         .o_ldm_flushreq     (ldm_flushreq                               ),
         .o_ldm_offset       (ldm_offset                                 ),
         .o_ldm_mem_vld      (ldm_mem_vld                                ),
-        .o_ldm_reg_code     (ldm_reg_code                               )
+        .o_ldm_reg_code     (re_code                                    )
     );
     ex_mux ex_mux_0(
         .i_op1              (ex_op1                                     ),
@@ -449,8 +449,8 @@ module armv4core (
 
         .i_ldm_offset       (ldm_offset                                 ),
         .i_ldm_mem_vld      (ldm_mem_vld                                ),
-        .i_ldm_reg_code     (ldm_reg_code                               ),
-        .i_ldm_reg          (ldm_reg_forwarded                          )
+        .i_ldm_reg_code     (re_code                                    ),
+        .i_ldm_reg          (re_reg_forwarded                           )
     );
     ex_stage ex_stage_0(
         .i_nzcv             (nzcv                                       ),
