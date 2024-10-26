@@ -107,21 +107,6 @@ module armv4core (
     wire            ex_mrs_vld              ;
     wire            ex_msr_vld              ;
 
-    wire [31:0]     ex_muxed_op1            ;
-    wire [31:0]     ex_muxed_op2            ;
-    wire [7:0]      ex_muxed_shift          ;
-    wire [2:0]      ex_muxed_shift_type     ;
-    wire [31:0]     ex_muxed_op3            ;
-    wire [3:0]      ex_muxed_opcode         ;
-    wire            ex_muxed_mem_vld        ;
-    wire [1:0]      ex_muxed_mem_size       ;
-    wire            ex_muxed_mem_sign       ;
-    wire            ex_muxed_mem_addr_src   ;
-    wire            ex_muxed_rd_vld         ;
-    wire [3:0]      ex_muxed_rd_code        ;
-    wire            ex_muxed_wb_rd_vld      ;
-    wire [3:0]      ex_muxed_wb_rd_code     ;
-
     wire            memctrl_vld             ;
     wire            memctrl_wr              ;
     wire            memctrl_sign            ;
@@ -265,8 +250,8 @@ module armv4core (
 
         .i_pc_en            (pc_en                                      ),
 
-        .i_wb_rd_vld        (ex_muxed_wb_rd_vld                         ),
-        .i_wb_rd_code       (ex_muxed_wb_rd_code                        ),
+        .i_wb_rd_vld        (ex_next_wb_rd_vld                          ),
+        .i_wb_rd_code       (ex_next_wb_rd_code                         ),
 
         .i_rm_code          (rm_code                                    ),
         .i_rn_code          (rn_code                                    ),
@@ -411,47 +396,6 @@ module armv4core (
         .o_ldm_mem_vld      (ldm_mem_vld                                ),
         .o_ldm_reg_code     (re_code                                    )
     );
-    ex_mux ex_mux_0(
-        .i_op1              (ex_op1                                     ),
-        .i_op2              (ex_op2                                     ),
-        .i_shift            (ex_shift                                   ),
-        .i_shift_type       (ex_shift_type                              ),
-        .i_op3              (ex_op3                                     ),
-        .i_opcode           (ex_opcode                                  ),
-        .i_mem_vld          (ex_mem_vld                                 ),
-        .i_mem_size         (ex_mem_size                                ),
-        .i_mem_sign         (ex_mem_sign                                ),
-        .i_mem_addr_src     (ex_mem_addr_src                            ),
-        .i_rd_vld           (ex_rd_vld                                  ),
-        .i_rd_code          (ex_rd_code                                 ),
-        .i_wb_rd_vld        (ex_wb_rd_vld                               ),
-        .i_wb_rd_code       (ex_wb_rd_code                              ),
-
-        .o_op1              (ex_muxed_op1                               ),
-        .o_op2              (ex_muxed_op2                               ),
-        .o_shift            (ex_muxed_shift                             ),
-        .o_shift_type       (ex_muxed_shift_type                        ),
-        .o_op3              (ex_muxed_op3                               ),
-        .o_opcode           (ex_muxed_opcode                            ),
-        .o_mem_vld          (ex_muxed_mem_vld                           ),
-        .o_mem_size         (ex_muxed_mem_size                          ),
-        .o_mem_sign         (ex_muxed_mem_sign                          ),
-        .o_mem_addr_src     (ex_muxed_mem_addr_src                      ),
-        .o_rd_vld           (ex_muxed_rd_vld                            ),
-        .o_rd_code          (ex_muxed_rd_code                           ),
-        .o_wb_rd_vld        (ex_muxed_wb_rd_vld                         ),
-        .o_wb_rd_code       (ex_muxed_wb_rd_code                        ),
-
-        .i_swp_vld          (ex_swp_vld                                 ),
-        .i_ldm_vld          (ex_ldm_vld                                 ),
-
-        .i_swp_hold         (swp_hold                                   ),
-
-        .i_ldm_offset       (ldm_offset                                 ),
-        .i_ldm_mem_vld      (ldm_mem_vld                                ),
-        .i_ldm_reg_code     (re_code                                    ),
-        .i_ldm_reg          (re_reg_forwarded                           )
-    );
     ex_stage ex_stage_0(
         .i_nzcv             (nzcv                                       ),
         .o_nzcv_alu         (nzcv_alu                                   ),
@@ -472,21 +416,30 @@ module armv4core (
         .o_memctrl_addr     (memctrl_addr                               ),
         .o_memctrl_wdata    (memctrl_wdata                              ),
 
-        .i_op1              (ex_muxed_op1                               ),
-        .i_op2              (ex_muxed_op2                               ),
-        .i_shift            (ex_muxed_shift                             ),
-        .i_shift_type       (ex_muxed_shift_type                        ),
-        .i_op3              (ex_muxed_op3                               ),
-        .i_opcode           (ex_muxed_opcode                            ),
-        .i_mem_vld          (ex_muxed_mem_vld                           ),
-        .i_mem_size         (ex_muxed_mem_size                          ),
-        .i_mem_sign         (ex_muxed_mem_sign                          ),
-        .i_mem_addr_src     (ex_muxed_mem_addr_src                      ),
-        .i_rd_vld           (ex_muxed_rd_vld                            ),
-        .i_rd_code          (ex_muxed_rd_code                           ),
-        .i_wb_rd_vld        (ex_muxed_wb_rd_vld                         ),
-        .i_wb_rd_code       (ex_muxed_wb_rd_code                        ),
+        .i_op1              (ex_op1                                     ),
+        .i_op2              (ex_op2                                     ),
+        .i_shift            (ex_shift                                   ),
+        .i_shift_type       (ex_shift_type                              ),
+        .i_op3              (ex_op3                                     ),
+        .i_opcode           (ex_opcode                                  ),
+        .i_mem_vld          (ex_mem_vld                                 ),
+        .i_mem_size         (ex_mem_size                                ),
+        .i_mem_sign         (ex_mem_sign                                ),
+        .i_mem_addr_src     (ex_mem_addr_src                            ),
+        .i_rd_vld           (ex_rd_vld                                  ),
+        .i_rd_code          (ex_rd_code                                 ),
+        .i_wb_rd_vld        (ex_wb_rd_vld                               ),
+        .i_wb_rd_code       (ex_wb_rd_code                              ),
 
+        .i_swp_hold         (swp_hold                                   ),
+
+        .i_ldm_offset       (ldm_offset                                 ),
+        .i_ldm_mem_vld      (ldm_mem_vld                                ),
+        .i_ldm_reg_code     (re_code                                    ),
+        .i_ldm_reg          (re_reg_forwarded                           ),
+
+        .i_swp_vld          (ex_swp_vld                                 ),
+        .i_ldm_vld          (ex_ldm_vld                                 ),
         .i_mrs_vld          (ex_mrs_vld                                 ),
         .i_msr_vld          (ex_msr_vld                                 ),
     
