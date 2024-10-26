@@ -1,4 +1,6 @@
 module shift_tb ();
+localparam NUM = 20;
+
 reg [31:0] op;
 reg [4:0] amount;
 reg carryin;
@@ -36,8 +38,11 @@ assign ror_result_ref = (op>>amount)|(op<<(32-amount));
 assign ror_carryout_ref = (amount==0)?carryin:ror_result_ref[31];
 assign ror_pass = ({ror_result, ror_carryout}=={ror_result_ref, ror_carryout_ref});
 
+wire pass;
+assign pass = lsl_pass & lsr_pass & asr_pass & ror_pass;
+
 initial begin
-    repeat (50) begin
+    repeat (NUM) begin
         #10
         op <= $random;
         amount <= $random;

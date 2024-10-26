@@ -10,6 +10,7 @@
 */
 
 `define TB_RAM_SIZE 65536   // size of ram (unit in byte)
+`define TB_RAM_FILE "armbuild/build.txt"
 
 `include "def.v"
 module armv4core_tb ();
@@ -65,7 +66,7 @@ reg [7:0] ram [`TB_RAM_SIZE-1:0];
 
 /* load ram from file */
 initial begin
-    $readmemh("armbuild/build.txt", ram, 'h0000_0000);
+    $readmemh(`TB_RAM_FILE, ram, 'h0000_0000);
 end
 
 /* rom interface */
