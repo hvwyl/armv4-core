@@ -69,15 +69,15 @@ initial begin
     $readmemh(`TB_RAM_FILE, ram, 'h0000_0000);
 end
 
+`define DELAY 2
+
 /* rom interface */
 wire rom_en;
 wire [31:0] rom_addr;
-reg [31:0] rom_data_edge;
 reg [31:0] rom_data;
 always @(posedge clk) begin
     if (rom_en) begin
-        rom_data_edge <= {ram[rom_addr+3], ram[rom_addr+2], ram[rom_addr+1], ram[rom_addr]};
-        #2 rom_data <= rom_data_edge;
+        rom_data <= #`DELAY {ram[rom_addr+3], ram[rom_addr+2], ram[rom_addr+1], ram[rom_addr]};
     end
 end
 
@@ -87,7 +87,6 @@ wire ram_wr;
 wire [1:0] ram_size;
 wire [31:0] ram_addr;
 wire [31:0] ram_wdata;
-reg [31:0] ram_rdata_edge;
 reg [31:0] ram_rdata;
 always @(posedge clk) begin
     if (ram_en) begin
@@ -111,16 +110,13 @@ always @(posedge clk) begin
         else begin
             case (ram_size)
                 `MEM_B: begin
-                    ram_rdata_edge <= {24'b0, ram[ram_addr]};
-                    #2 ram_rdata <= ram_rdata_edge;
+                    ram_rdata <= #`DELAY {24'b0, ram[ram_addr]};
                 end
                 `MEM_H: begin
-                    ram_rdata_edge <= {16'b0, ram[ram_addr+1], ram[ram_addr]};
-                    #2 ram_rdata <= ram_rdata_edge;
+                    ram_rdata <= #`DELAY {16'b0, ram[ram_addr+1], ram[ram_addr]};
                 end
                 default: begin
-                    ram_rdata_edge <= {ram[ram_addr+3], ram[ram_addr+2], ram[ram_addr+1], ram[ram_addr]};
-                    #2 ram_rdata <= ram_rdata_edge;
+                    ram_rdata <= #`DELAY {ram[ram_addr+3], ram[ram_addr+2], ram[ram_addr+1], ram[ram_addr]};
                 end
             endcase
         end

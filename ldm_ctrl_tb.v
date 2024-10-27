@@ -17,8 +17,9 @@ initial begin
     $finish();
 end
 
-reg ldm_vld, p, u, l;
+reg ldm_vld, p, u, s, l;
 reg [15:0] reglist;
+wire spsr_res;
 wire hold;
 wire flushreq;
 wire [3:0] reg_code;
@@ -35,6 +36,7 @@ initial begin
                 ldm_vld <= 1'b1;
                 p <= $random;
                 u <= $random;
+                s <= $random;
                 l <= $random;
                 reglist <= $random;
                 i <= i+1;
@@ -57,8 +59,11 @@ ldm_ctrl ldm_ctrl_0(
     .i_ldm_vld          (ldm_vld),
     .i_ldm_p            (p),
     .i_ldm_u            (u),
+    .i_ldm_s            (s),
     .i_ldm_l            (l),
     .i_reglist          (reglist),
+
+    .o_spsr_res         (spsr_res),
 
     .o_ldm_hold         (hold),
     .o_ldm_flushreq     (flushreq),
