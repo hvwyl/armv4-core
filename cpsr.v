@@ -57,25 +57,20 @@ module cpsr (
             irq_mask_spsr <= 'b1;
         end
         else if (en) begin
-            case ({i_spsr_bak, i_spsr_res})
-                2'b00: if (write_cpsr) begin
-                    irq_mask <= i_xpsr_reg[7];
-                end
-                else begin
-                    irq_mask <= irq_mask;
-                end
-                2'b01: irq_mask <= irq_mask_spsr;
-                2'b10: irq_mask <= 'b1;
-                2'b11: irq_mask <= 'b1;
-            endcase
+            if (i_spsr_res) begin
+                irq_mask <= irq_mask_spsr;
+            end
+            else if (i_spsr_bak) begin
+                irq_mask <= 'b1;
+            end
+            else if (write_cpsr) begin
+                irq_mask <= i_xpsr_reg[7];
+            end
             if (i_spsr_bak) begin
-                irq_mask_spsr <= irq_mask;
+                irq_mask_spsr <= write_cpsr?i_xpsr_reg[7]:irq_mask;
             end
             else if (write_spsr) begin
                 irq_mask_spsr <= i_xpsr_reg[7];
-            end
-            else begin
-                irq_mask_spsr <= irq_mask_spsr;
             end
         end
     end
@@ -105,13 +100,10 @@ module cpsr (
                 nzcv <= nzcv_next;
             end
             if (i_spsr_bak) begin
-                nzcv_spsr <= nzcv;
+                nzcv_spsr <= nzcv_next;
             end
             else if (write_spsr) begin
                 nzcv_spsr <= i_xpsr_reg[31:28];
-            end
-            else begin
-                nzcv_spsr <= nzcv_spsr;
             end
         end
     end
