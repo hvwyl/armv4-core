@@ -100,7 +100,7 @@ module id_stage (
     assign is_dp0 = ({i_inst[27:25],i_inst[4]}==4'b0000)&((i_inst[24:23]!=2'b10)|i_inst[20]);
     assign is_dp1 = ({i_inst[27:25],i_inst[7],i_inst[4]}==5'b00001) & ((i_inst[24:23]!=2'b10)|i_inst[20]);
     assign is_dp2 = (i_inst[27:25]==3'b001)&((i_inst[24:23]!=2'b10)|i_inst[20]);
-    assign is_b = (i_inst[27:25]==4'b101);
+    assign is_b = (i_inst[27:25]==3'b101);
     assign is_ldr0 = (i_inst[27:25]==3'b010);
     assign is_ldr1 = ({i_inst[27:25],i_inst[4]}==4'b0110);
     assign is_ldrh0 = ({i_inst[27:25],i_inst[22],i_inst[11:4]}==12'b000_0_00001011);

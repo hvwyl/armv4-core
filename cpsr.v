@@ -80,10 +80,10 @@ module cpsr (
     reg [3:0] nzcv_next;
     always @(*) begin
         case ({i_nzcv_flag, write_cpsr})
-            2'b00: nzcv_next <= nzcv;
-            2'b01: nzcv_next <= i_xpsr_reg[31:28];
-            2'b10: nzcv_next <= i_nzcv_alu;
-            2'b11: nzcv_next <= i_xpsr_reg[31:28];
+            2'b00: nzcv_next = nzcv;
+            2'b01: nzcv_next = i_xpsr_reg[31:28];
+            2'b10: nzcv_next = i_nzcv_alu;
+            2'b11: nzcv_next = i_xpsr_reg[31:28];
         endcase
     end
     reg [3:0] nzcv_spsr;

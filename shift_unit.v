@@ -70,58 +70,58 @@ module shift_unit (
             `SHIFT_LSL: begin
                 // LSL
                 if (i_amount == 8'd32) begin
-                    o_result <= 'b0;
-                    o_carry <= i_op[0];
+                    o_result = 'b0;
+                    o_carry = i_op[0];
                 end
                 else if ((|i_amount[7:5]) != 'b1) begin
-                    o_result <= lsl_result;
-                    o_carry <= lsl_carry;
+                    o_result = lsl_result;
+                    o_carry = lsl_carry;
                 end
                 else begin
-                    o_result <= 'b0;
-                    o_carry <= 'b0;
+                    o_result = 'b0;
+                    o_carry = 'b0;
                 end
             end
             `SHIFT_LSR: begin
                 // LSR
                 if (i_amount == 8'd32) begin
-                    o_result <= 'b0;
-                    o_carry <= i_op[31];
+                    o_result = 'b0;
+                    o_carry = i_op[31];
                 end
                 else if ((|i_amount[7:5]) != 'b1) begin
-                    o_result <= lsr_result;
-                    o_carry <= lsr_carry;
+                    o_result = lsr_result;
+                    o_carry = lsr_carry;
                 end
                 else begin
-                    o_result <= 'b0;
-                    o_carry <= 'b0;
+                    o_result = 'b0;
+                    o_carry = 'b0;
                 end
             end
             `SHIFT_ASR: begin
                 // ASR
                 if ((|i_amount[7:5]) != 'b1) begin
-                    o_result <= asr_result;
-                    o_carry <= asr_carry;
+                    o_result = asr_result;
+                    o_carry = asr_carry;
                 end
                 else begin
-                    o_result <= {32{i_op[31]}};
-                    o_carry <= i_op[31];
+                    o_result = {32{i_op[31]}};
+                    o_carry = i_op[31];
                 end
             end
             `SHIFT_ROR: begin
                 // ROR
-                o_result <= ror_result;
-                o_carry <= ror_carry;
+                o_result = ror_result;
+                o_carry = ror_carry;
             end
             `SHIFT_RRX: begin
                 // RRX
-                o_result <= {i_carry, i_op[31:1]};
-                o_carry <= i_op[0];
+                o_result = {i_carry, i_op[31:1]};
+                o_carry = i_op[0];
             end
             default: begin
                 // no shift
-                o_result <= i_op;
-                o_carry <= i_carry;
+                o_result = i_op;
+                o_carry = i_carry;
             end
         endcase
     end

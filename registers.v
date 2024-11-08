@@ -73,15 +73,15 @@ module registers (
             always @(*) begin
                 case ({(i_rd_code_ex == i)&i_rd_en_ex, (i_rd_code_wb == i)&i_rd_en_wb})
                     2'b00: if (!i_int_mode) begin
-                        reg_next[i] <= reg_stack[i];
+                        reg_next[i] = reg_stack[i];
                     end
                     else begin
-                        reg_next[i] <= reg_stack_int[i];
+                        reg_next[i] = reg_stack_int[i];
                     end
-                    2'b01: reg_next[i] <= i_rd_reg_wb;
-                    2'b10: reg_next[i] <= i_rd_reg_ex;
+                    2'b01: reg_next[i] = i_rd_reg_wb;
+                    2'b10: reg_next[i] = i_rd_reg_ex;
                     // write the same registers in parallel, use the value of the EX phase
-                    2'b11: reg_next[i] <= i_rd_reg_ex;
+                    2'b11: reg_next[i] = i_rd_reg_ex;
                 endcase
             end
             if ((0 == i) || (1 == i)) begin

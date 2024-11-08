@@ -38,10 +38,10 @@ module pc (
 
     always @(*) begin
         if (i_pc_en) begin
-            pc_next <= i_pc_reg;
+            pc_next = i_pc_reg;
         end
         else begin
-            pc_next <= pc_offset4;
+            pc_next = pc_offset4;
         end
     end
 
