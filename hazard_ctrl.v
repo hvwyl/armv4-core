@@ -1,5 +1,5 @@
 module hazard_ctrl (
-    /* interrupt request input (from EX phase) */
+    /* interrupt request input (from ID phase) */
     input i_irq_flag,
 
     /* write PC signal input */

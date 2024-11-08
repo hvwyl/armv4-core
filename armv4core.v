@@ -277,7 +277,7 @@ module armv4core (
         .rst_n              (rst_n                                      ),
         .en                 (en&(~hazard_bubble)&(~hazard_pipelinehold) ),
 
-        .i_irq_flag         (if_irq_flag&irq_flag                       ),
+        .i_irq_flag         (irq_flag&if_irq_flag                       ),
         .i_inst_vld         (~(hazard_id_flush)                         ),
         .o_irq_flag         (id_irq_flag                                ),
         .o_inst_vld         (inst_vld                                   )
