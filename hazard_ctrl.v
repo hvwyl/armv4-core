@@ -24,7 +24,6 @@ module hazard_ctrl (
     output o_id_flush,
     output o_ex_flush,
     output o_bubble,
-    output o_irq_ctrlhold,
     output o_pipelinehold
 );
     wire hazard_data;
@@ -43,6 +42,5 @@ module hazard_ctrl (
     assign o_id_flush = hazard_b;
     assign o_ex_flush = hazard_b||hazard_wb_b||hazard_data||i_irq_flag||o_pipelinehold;
     assign o_bubble = hazard_data;
-    assign o_irq_ctrlhold = hazard_wb_b||o_pipelinehold;
     assign o_pipelinehold = i_swp_hold||i_ldm_hold;
 endmodule

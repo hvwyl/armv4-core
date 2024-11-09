@@ -54,7 +54,6 @@ module armv4core (
     wire            hazard_id_flush         ;
     wire            hazard_ex_flush         ;
     wire            hazard_bubble           ;
-    wire            hazard_irq_ctrlhold     ;
     wire            hazard_pipelinehold     ;
 
     wire            if_irq_flag             ;
@@ -148,7 +147,7 @@ module armv4core (
         .en                 (en                                         ),
         .i_irq              (i_irq                                      ),
         .i_irq_mask         (irq_mask                                   ),
-        .i_irq_res          (ex_irq_flag&(~hazard_irq_ctrlhold)         ),
+        .i_irq_res          (ex_irq_flag                                ),
         .o_irq_flag         (irq_flag                                   )
     );
     pc pc_0(
@@ -269,7 +268,6 @@ module armv4core (
         .o_id_flush         (hazard_id_flush                            ),
         .o_ex_flush         (hazard_ex_flush                            ),
         .o_bubble           (hazard_bubble                              ),
-        .o_irq_ctrlhold     (hazard_irq_ctrlhold                        ),
         .o_pipelinehold     (hazard_pipelinehold                        )
     );
     if_id if_id_0(
