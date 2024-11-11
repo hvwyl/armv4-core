@@ -1,12 +1,10 @@
-void irq_main(int irq_r0, int irq_r1){
+void irq_main(int irq_r0){
     static int *p=(int *)0x4008;
     static int c=0;
     int spsr;
     p[0]=irq_r0;
-    p[1]=irq_r1;
-    p[2]=(int)0x0d000721;
-    p[3]=(int)0x0d000721;
-    p+=4;
+    p[1]=(int)0x0d000721;
+    p+=2;
     c++;
     // only two interrupts are handled
     if(c==2){

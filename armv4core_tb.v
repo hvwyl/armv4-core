@@ -15,7 +15,7 @@
 `include "def.v"
 module armv4core_tb ();
 reg clk, rst_n, en, irq;
-reg [31:0] irq_r0, irq_r1;
+reg [31:0] irq_r0;
 
 initial begin
     clk = 0;
@@ -44,19 +44,16 @@ initial begin
     irq = 0;
     #6000
     irq_r0 = 32'h01234567;
-    irq_r1 = 32'h89ABCDEF;
     irq = 1;
     #100
     irq = 0;
     #6000
     irq_r0 = 32'hFEDCBA98;
-    irq_r1 = 32'h76543210;
     irq = 1;
     #100
     irq = 0;
     #6000
     irq_r0 = 32'h01234567;
-    irq_r1 = 32'h89ABCDEF;
     irq = 1;
     #100
     irq = 0;
@@ -131,7 +128,6 @@ armv4core armv4core_0(
     /* interrupt request */
     .i_irq              (irq),
     .i_irq_r0           (irq_r0),
-    .i_irq_r1           (irq_r1),
 
     /* rom bus */
     .o_rom_en           (rom_en),

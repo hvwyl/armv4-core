@@ -6,7 +6,6 @@ module armv4core (
     /* interrupt request */
     input           i_irq,
     input [31:0]    i_irq_r0,
-    input [31:0]    i_irq_r1,
 
     /* rom bus */
     output          o_rom_en,
@@ -173,7 +172,6 @@ module armv4core (
 
         .i_irq_bak          ({irq_flag, if_irq_flag}                    ),
         .i_irq_r0           (i_irq_r0                                   ),
-        .i_irq_r1           (i_irq_r1                                   ),
 
         .i_rm_code          (rm_code                                    ),
         .i_rn_code          (rn_code                                    ),

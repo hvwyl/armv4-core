@@ -9,7 +9,6 @@ module registers (
     /* interrupt request backup input*/
     input [1:0]         i_irq_bak,
     input [31:0]        i_irq_r0,
-    input [31:0]        i_irq_r1,
 
     /* register code input */
     input [3:0] i_rm_code,
@@ -63,10 +62,6 @@ module registers (
     assign o_pc_en = pc_en_ex|pc_en_wb;
     assign o_pc_reg = pc_en_wb?(i_rd_reg_wb):(i_rd_reg_ex);
 
-    wire [31:0] reg_irq [1:0];
-    assign reg_irq[0] = i_irq_r0;
-    assign reg_irq[1] = i_irq_r1;
-
     reg [31:0] reg_next [14:0];
     generate
         for (i = 0; i<15; i=i+1) begin
@@ -84,7 +79,7 @@ module registers (
                     2'b11: reg_next[i] = i_rd_reg_ex;
                 endcase
             end
-            if ((0 == i) || (1 == i)) begin
+            if (0 == i) begin
                 always @(posedge clk or negedge rst_n) begin
                     if (!rst_n) begin
                         reg_stack[i] <= 'b0;
@@ -95,7 +90,7 @@ module registers (
                             if (!i_int_mode) begin
                                 reg_stack[i] <= reg_next[i];
                                 case (i_irq_bak)
-                                    2'b00, 2'b01: reg_stack_int[i] <= reg_irq[i];
+                                    2'b00, 2'b01: reg_stack_int[i] <= i_irq_r0;
                                     default: reg_stack_int[i] <= reg_stack_int[i];
                                 endcase
                             end

@@ -36,7 +36,7 @@ loop:
 	.type IRQ_Handler, %function
 IRQ_Handler:
 	stmfd	sp!, {lr}
-@ Branch to irq_main(int irq_r0, int irq_r1)
+@ Branch to irq_main(int irq_r0)
 	bl		irq_main
 	ldmfd	sp!, {pc}^
 	
