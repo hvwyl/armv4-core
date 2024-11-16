@@ -42,6 +42,9 @@ module id_stage (
     output reg [3:0]    o_wb_rd_code,
     output reg          o_nzcv_flag,
     
+    /* multiplier control signals */
+    output              o_mul_vld,
+
     /* high-priority function control signals */
     output reg          o_swp_vld,      // SWP instruction
     output reg          o_ldm_vld,      // LDM instruction
@@ -96,11 +99,13 @@ module id_stage (
         is_swp,
         is_ldm,
         is_mrs,
-        is_msr;
+        is_msr,
+        is_mul,
+        is_mull;
     assign is_dp0 = ({i_inst[27:25],i_inst[4]}==4'b0000)&((i_inst[24:23]!=2'b10)|i_inst[20]);
     assign is_dp1 = ({i_inst[27:25],i_inst[7],i_inst[4]}==5'b00001) & ((i_inst[24:23]!=2'b10)|i_inst[20]);
     assign is_dp2 = (i_inst[27:25]==3'b001)&((i_inst[24:23]!=2'b10)|i_inst[20]);
-    assign is_b = (i_inst[27:25]==3'b101);
+    assign is_b = (i_inst[27:25]==4'b101);
     assign is_ldr0 = (i_inst[27:25]==3'b010);
     assign is_ldr1 = ({i_inst[27:25],i_inst[4]}==4'b0110);
     assign is_ldrh0 = ({i_inst[27:25],i_inst[22],i_inst[11:4]}==12'b000_0_00001011);
@@ -113,6 +118,8 @@ module id_stage (
     assign is_ldm = (i_inst[27:25]==3'b100);
     assign is_mrs = ({i_inst[27:23],i_inst[21:20],i_inst[7],i_inst[4]}==9'b000100000);
     assign is_msr = ({i_inst[27:23],i_inst[21:20],i_inst[7],i_inst[4]}==9'b000101000);
+    assign is_mul = ({i_inst[27:22],i_inst[7:4]}==10'b0000_00_1001);
+    assign is_mull = ({i_inst[27:23],i_inst[7:4]}==9'b0000_1_1001);
 
     /* regcode decode */
     // Rm is always i_inst[3:0]
@@ -179,6 +186,16 @@ module id_stage (
             o_rn_code = rn_code;
             o_rs_code = rd_code;
         end
+        else if (is_mul||is_mull) begin
+            // Multiplex Rm datapath and Rn datapath
+            // Multiplex Rs datapath and Rm datapath
+            o_rm_code = rm_code;
+            o_rn_code = rd_code; // Ra is always i_inst[15:12], the same datapath as Rd
+            o_rs_code = rs_code;
+            // for mul operations of long types:
+            // RdLo has the same datapath as Rd, and it will be acc_lo operand by multiplexing op1 datapath
+            // RdHi code will be deferred to the next stage of the pipeline, and the acc_hi operand will be obtained through Re
+        end
         else begin
             o_rm_code = rm_code;
             o_rn_code = rn_code;
@@ -189,9 +206,15 @@ module id_stage (
             o_rd_code = 4'd15;
             o_wb_rd_code = 4'd14; // BL instruction will write op3 into R14
         end
-        else if (is_ldr0||is_ldr1||is_ldm) begin
+        else if (is_ldr0||is_ldr1||is_ldm||is_mul) begin
             o_rd_code = rn_code; // Rn Write Back
             o_wb_rd_code = rd_code;
+        end
+        else if (is_mull) begin
+            // RdLo is always i_inst[15:12], same as Rd
+            // RdHi is always i_inst[19:16], same as Rn
+            o_rd_code = rd_code;
+            o_wb_rd_code = rn_code; // RdHi Write Back
         end
         else begin
             o_rd_code = rd_code;
@@ -327,6 +350,17 @@ module id_stage (
             o_rn_code_vld = 'b0;
             o_rs_code_vld = 'b0;
         end
+        else if (is_mul||is_mull) begin
+            o_op1 = i_rn_reg; // Multiplexed Ra datapath in Rn
+            o_op2 = i_rm_reg; // Multiplexed Rn datapath in Rm
+            o_shift = 'b0;
+            o_shift_type = `SHIFT_NONE; // noshift
+            o_op3 = i_rs_reg; // Multiplexed Rm datapath in Rs
+            o_opcode = `ALU_ORR;
+            o_rm_code_vld = 'b1;
+            o_rn_code_vld = 'b1;
+            o_rs_code_vld = 'b1;
+        end
         else begin
             o_op1 = i_rn_reg;
             o_op2 = i_rm_reg;
@@ -438,6 +472,24 @@ module id_stage (
             o_wb_rd_vld = 'b0;
             o_nzcv_flag = 'b0;
         end
+        else if (cond_vld && (is_mul)) begin
+            o_mem_vld = 'b0;
+            o_mem_size = `MEM_W;
+            o_mem_sign = 'b0;
+            o_mem_addr_src = 'b1;
+            o_rd_vld = 'b1;
+            o_wb_rd_vld = 'b0;
+            o_nzcv_flag = i_inst[20];
+        end
+        else if (cond_vld && (is_mull)) begin
+            o_mem_vld = 'b0;
+            o_mem_size = `MEM_W;
+            o_mem_sign = 'b0;
+            o_mem_addr_src = 'b1;
+            o_rd_vld = 'b1;
+            o_wb_rd_vld = 'b1; // Write RdHi register in WB phase
+            o_nzcv_flag = i_inst[20];
+        end
         else begin
             o_mem_vld = 'b0;
             o_mem_size = `MEM_W;
@@ -448,6 +500,9 @@ module id_stage (
             o_nzcv_flag = 'b0;
         end
     end
+
+    /* multiplier control signals */
+    assign o_mul_vld = cond_vld && (is_mul||is_mull);
     
     /* high-priority function control signals */
     always @(*) begin

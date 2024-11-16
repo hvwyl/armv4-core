@@ -76,6 +76,7 @@ module armv4core (
     wire            id_wb_rd_vld            ;
     wire [3:0]      id_wb_rd_code           ;
     wire            id_nzcv_flag            ;
+    wire            id_mul_vld              ;
     wire            id_swp_vld              ;
     wire            id_ldm_vld              ;
     wire            id_mrs_vld              ;
@@ -102,6 +103,7 @@ module armv4core (
     wire            ex_wb_rd_vld            ;
     wire [3:0]      ex_wb_rd_code           ;
     wire            ex_nzcv_flag            ;
+    wire            ex_mul_vld              ;
     wire            ex_swp_vld              ;
     wire            ex_ldm_vld              ;
     wire            ex_mrs_vld              ;
@@ -132,13 +134,18 @@ module armv4core (
     wire            rd_en_wb            ;
     wire [3:0]      rd_code_wb          ;
     wire [31:0]     rd_reg_wb           ;
-    
+
+    wire            mul_result_vld      ;
+    wire [31:0]     mul_result_lo       ;
+    wire [31:0]     mul_result_hi       ;
+
     wire            swp_hold            ;
     wire            spsr_res            ;
     wire            ldm_hold            ;
     wire            ldm_flushreq        ;
     wire [31:0]     ldm_offset          ;
     wire            ldm_mem_vld         ;
+    wire [3:0]      ldm_code            ;
 
     irq_ctrl irq_ctrl_0(
         .clk                (clk                                        ),
@@ -163,6 +170,7 @@ module armv4core (
         .o_pc               (pc                                         ),
         .o_pc_next          (pc_next                                    )
     );
+    assign re_code = ex_mul_vld ? ex_wb_rd_code : ldm_code;
     registers registers_0(
         .clk                (clk                                        ),
         .rst_n              (rst_n                                      ),
@@ -260,6 +268,7 @@ module armv4core (
         .i_rn_code_vld      (rn_code_vld                                ),
         .i_rs_code_vld      (rs_code_vld                                ),
 
+        .i_mul_hold         (~mul_result_vld                            ),
         .i_swp_hold         (swp_hold                                   ),
         .i_ldm_hold         (ldm_hold                                   ),
 
@@ -267,6 +276,23 @@ module armv4core (
         .o_ex_flush         (hazard_ex_flush                            ),
         .o_bubble           (hazard_bubble                              ),
         .o_pipelinehold     (hazard_pipelinehold                        )
+    );
+    mul_ctrl mul_ctrl_0(
+        .clk                (clk                                        ),
+        .rst_n              (rst_n                                      ),
+        .en                 (en                                         ),
+
+        .i_vld              (id_mul_vld                                 ),
+
+        .i_opcode           (ex_opcode[2:0]                             ),
+        .i_op1              (ex_op2                                     ),
+        .i_op2              (ex_op3                                     ),
+        .i_acc_lo           (ex_op1                                     ),
+        .i_acc_hi           (re_reg_forwarded                           ),
+
+        .o_result_vld       (mul_result_vld                             ),
+        .o_result_lo        (mul_result_lo                              ),
+        .o_result_hi        (mul_result_hi                              )
     );
     if_id if_id_0(
         .clk                (clk                                        ),
@@ -315,6 +341,7 @@ module armv4core (
         .o_wb_rd_vld        (id_wb_rd_vld                               ),
         .o_wb_rd_code       (id_wb_rd_code                              ),
         .o_nzcv_flag        (id_nzcv_flag                               ),
+        .o_mul_vld          (id_mul_vld                                 ),
         .o_swp_vld          (id_swp_vld                                 ),
         .o_ldm_vld          (id_ldm_vld                                 ),
         .o_mrs_vld          (id_mrs_vld                                 ),
@@ -347,6 +374,7 @@ module armv4core (
         .i_wb_rd_vld        (id_wb_rd_vld                               ),
         .i_wb_rd_code       (id_wb_rd_code                              ),
         .i_nzcv_flag        (id_nzcv_flag                               ),
+        .i_mul_vld          (id_mul_vld                                 ),
         .i_swp_vld          (id_swp_vld                                 ),
         .i_ldm_vld          (id_ldm_vld                                 ),
         .i_mrs_vld          (id_mrs_vld                                 ),
@@ -368,6 +396,7 @@ module armv4core (
         .o_wb_rd_vld        (ex_wb_rd_vld                               ),
         .o_wb_rd_code       (ex_wb_rd_code                              ),
         .o_nzcv_flag        (ex_nzcv_flag                               ),
+        .o_mul_vld          (ex_mul_vld                                 ),
         .o_swp_vld          (ex_swp_vld                                 ),
         .o_ldm_vld          (ex_ldm_vld                                 ),
         .o_mrs_vld          (ex_mrs_vld                                 ),
@@ -398,7 +427,7 @@ module armv4core (
         .o_ldm_flushreq     (ldm_flushreq                               ),
         .o_ldm_offset       (ldm_offset                                 ),
         .o_ldm_mem_vld      (ldm_mem_vld                                ),
-        .o_ldm_reg_code     (re_code                                    )
+        .o_ldm_reg_code     (ldm_code                                   )
     );
     ex_stage ex_stage_0(
         .i_nzcv             (nzcv                                       ),
@@ -435,12 +464,19 @@ module armv4core (
         .i_wb_rd_vld        (ex_wb_rd_vld                               ),
         .i_wb_rd_code       (ex_wb_rd_code                              ),
 
+        .i_mul_result_vld   (mul_result_vld                             ),
+        .i_mul_result_lo    (mul_result_lo                              ),
+        .i_mul_result_hi    (mul_result_hi                              ),
+
         .i_swp_hold         (swp_hold                                   ),
 
         .i_ldm_offset       (ldm_offset                                 ),
         .i_ldm_mem_vld      (ldm_mem_vld                                ),
         .i_ldm_reg_code     (re_code                                    ),
         .i_ldm_reg          (re_reg_forwarded                           ),
+
+        .i_mul_vld          (ex_mul_vld                                 ),
+        .i_mul_lmode        (ex_opcode[2]                               ),
 
         .i_swp_vld          (ex_swp_vld                                 ),
         .i_ldm_vld          (ex_ldm_vld                                 ),

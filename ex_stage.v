@@ -39,6 +39,11 @@ module ex_stage (
     input               i_wb_rd_vld,
     input [3:0]         i_wb_rd_code,
 
+    /* from mul ctrl */
+    input               i_mul_result_vld,
+    input [31:0]        i_mul_result_lo,
+    input [31:0]        i_mul_result_hi,
+
     /* from swp ctrl */
     input               i_swp_hold,
 
@@ -47,6 +52,10 @@ module ex_stage (
     input               i_ldm_mem_vld,
     input [3:0]         i_ldm_reg_code,
     input [31:0]        i_ldm_reg,
+
+    /* multiplier control signals */
+    input               i_mul_vld,
+    input               i_mul_lmode,
 
     /* high-priority function control signals */
     input               i_swp_vld,       // SWP instruction
@@ -73,12 +82,11 @@ module ex_stage (
 
     reg [31:0] muxed_op3;
     always @(*) begin
-        if (i_ldm_vld) begin
-            muxed_op3 = i_ldm_reg;
-        end
-        else begin
-            muxed_op3 = i_op3;
-        end
+        case ({i_mul_vld, i_ldm_vld})
+            'b01: muxed_op3 = i_ldm_reg;
+            'b10: muxed_op3 = i_mul_result_hi;
+            default: muxed_op3 = i_op3;
+        endcase
     end
 
     reg muxed_mem_vld;
@@ -117,6 +125,7 @@ module ex_stage (
     wire [31:0] shift_result;
     wire shift_carry;
     wire [31:0] alu_result;
+    wire [3:0] alu_nzcv;
     shift_unit shift_unit_0(
         .i_op       (muxed_op2),
         .i_type     (i_shift_type),
@@ -131,9 +140,18 @@ module ex_stage (
         .i_op1          (i_op1),
         .i_op2          (shift_result),
         .i_shift_carry  (shift_carry),
-        .o_nzcv         (o_nzcv_alu),
+        .o_nzcv         (alu_nzcv),
         .o_result       (alu_result)
     );
+    reg [3:0] muxed_nzcv_alu;
+    always @(*) begin
+        case ({i_mul_vld, i_mul_lmode})
+            'b10: muxed_nzcv_alu = {i_mul_result_lo[31], i_mul_result_lo=='b0, i_nzcv[1:0]};
+            'b11: muxed_nzcv_alu = {i_mul_result_hi[31], {i_mul_result_hi, i_mul_result_lo}=='b0, i_nzcv[1:0]};
+            default: muxed_nzcv_alu = alu_nzcv;
+        endcase
+    end
+    assign o_nzcv_alu = alu_nzcv;
 
     /* to xPSR registers */
     assign o_xpsr_en_ex = i_msr_vld;
@@ -141,9 +159,17 @@ module ex_stage (
     assign o_xpsr_reg = alu_result;
 
     /* to registers */
-    assign o_rd_en_ex = i_rd_vld;
+    assign o_rd_en_ex = i_rd_vld&i_mul_result_vld;
     assign o_rd_code_ex = i_rd_code;
-    assign o_rd_reg_ex = i_mrs_vld?i_xpsr_reg:alu_result;
+    reg [31:0] muxed_rd_reg_ex;
+    always @(*) begin
+        case ({i_mul_vld, i_mrs_vld})
+            'b01: muxed_rd_reg_ex = i_xpsr_reg;
+            'b10: muxed_rd_reg_ex = i_mul_result_lo;
+            default: muxed_rd_reg_ex = alu_result;
+        endcase
+    end
+    assign o_rd_reg_ex = muxed_rd_reg_ex;
     
     /* to mem ctrl */
     assign o_memctrl_vld = muxed_mem_vld;
@@ -156,7 +182,7 @@ module ex_stage (
     /* to next pipeline */
     assign o_wb_op = muxed_op3;             // BL instruction write LR register in WB phase, LDM write the same value in register directly
     assign o_wb_rd_src = muxed_mem_vld;     // BL instruction do not enable mem, LDM write the same value in register directly
-    assign o_wb_rd_vld = muxed_wb_rd_vld;
+    assign o_wb_rd_vld = muxed_wb_rd_vld&i_mul_result_vld;
     assign o_wb_rd_code = muxed_wb_rd_code;
     
 endmodule

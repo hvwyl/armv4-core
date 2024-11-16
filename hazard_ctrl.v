@@ -18,6 +18,7 @@ module hazard_ctrl (
     input               i_rs_code_vld,
 
     /* hold input */
+    input               i_mul_hold,
     input               i_swp_hold,
     input               i_ldm_hold,
 
@@ -42,5 +43,5 @@ module hazard_ctrl (
     assign o_id_flush = hazard_b;
     assign o_ex_flush = hazard_b||hazard_wb_b||hazard_data||i_irq_flag||o_pipelinehold;
     assign o_bubble = hazard_data;
-    assign o_pipelinehold = i_swp_hold||i_ldm_hold;
+    assign o_pipelinehold = i_mul_hold||i_swp_hold||i_ldm_hold;
 endmodule
