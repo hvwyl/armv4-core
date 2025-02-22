@@ -13,14 +13,7 @@ module alu (
     reg adc_unit_carryin;
     wire [31:0] adc_unit_result;
     wire adc_unit_carryout, adc_unit_overflowout;
-    adder32 adder32_0(
-        .i_op1      (adc_unit_op1),
-        .i_op2      (adc_unit_op2),
-        .i_carry    (adc_unit_carryin),
-
-        .o_result   (adc_unit_result),
-        .o_carry    (adc_unit_carryout)
-    );
+    assign {adc_unit_carryout, adc_unit_result} = adc_unit_op1 + adc_unit_op2 + adc_unit_carryin;
     assign adc_unit_overflowout = ({adc_unit_op1[31], adc_unit_op2[31], adc_unit_result[31]}==3'b110)|({adc_unit_op1[31], adc_unit_op2[31], adc_unit_result[31]}==3'b001);
 
     always @(*) begin

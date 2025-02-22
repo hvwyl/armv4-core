@@ -27,21 +27,12 @@ module pc (
     reg [31:0] pc;
     reg [31:0] pc_next;
 
-    wire [31:0] pc_offset4;
-    adder32 adder32_0(
-        .i_op1      (pc),
-        .i_op2      (32'd4),
-        .i_carry    (1'b0),
-        .o_result   (pc_offset4),
-        .o_carry    ()
-    );
-
     always @(*) begin
         if (i_pc_en) begin
             pc_next = i_pc_reg;
         end
         else begin
-            pc_next = pc_offset4;
+            pc_next = pc + 'd4;
         end
     end
 
