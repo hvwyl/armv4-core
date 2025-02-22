@@ -48,8 +48,8 @@ module ldm_ctrl (
     assign o_ldm_hold = ~(reglist_reg=='b0);
     assign o_ldm_flushreq = lpc_flag & (reglist_reg=='b0);
     assign o_ldm_offset = {25'd0, cnt, 2'd0};
-    assign o_ldm_mem_vld = ldm_p?(cnt!='b0):(reglist_reg!='b0);
-    assign o_ldm_reg_code = ldm_p?reg_code_past:reg_code;
+    assign o_ldm_mem_vld = ldm_p ? (cnt!='b0) : (reglist_reg!='b0);
+    assign o_ldm_reg_code = ldm_p ? reg_code_past : reg_code;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -76,24 +76,7 @@ module ldm_ctrl (
                 end
             end
             else begin
-                case (cnt[3:0])
-                    'd0: cnt <= 'd1;
-                    'd1: cnt <= 'd2;
-                    'd2: cnt <= 'd3;
-                    'd3: cnt <= 'd4;
-                    'd4: cnt <= 'd5;
-                    'd5: cnt <= 'd6;
-                    'd6: cnt <= 'd7;
-                    'd7: cnt <= 'd8;
-                    'd8: cnt <= 'd9;
-                    'd9: cnt <= 'd10;
-                    'd10: cnt <= 'd11;
-                    'd11: cnt <= 'd12;
-                    'd12: cnt <= 'd13;
-                    'd13: cnt <= 'd14;
-                    'd14: cnt <= 'd15;
-                    'd15: cnt <= 'd16;
-                endcase
+                cnt <= cnt[3:0] + 1'd1;
                 reglist_reg[reg_code] <= 'b0;
             end
         end
