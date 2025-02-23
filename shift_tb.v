@@ -51,10 +51,14 @@ initial begin
     $finish;
 end
 
-shift #(
-    .DATA_WIDTH (32),
-    .SHIFT_TYPE ("LSL")
-) shift_lsl (
+localparam LSL = 2'b00;
+localparam LSR = 2'b01;
+localparam ASR = 2'b10;
+localparam ROR = 2'b11;
+
+// LSL module
+shift shift_lsl (
+    .i_type     (LSL),
     .i_op       (op),
     .i_amount   (amount),
     .i_carry    (carryin),
@@ -62,10 +66,9 @@ shift #(
     .o_carry    (lsl_carryout)
 );
 
-shift #(
-    .DATA_WIDTH (32),
-    .SHIFT_TYPE ("LSR")
-) shift_lsr (
+// LSR module
+shift shift_lsr (
+    .i_type     (LSR),
     .i_op       (op),
     .i_amount   (amount),
     .i_carry    (carryin),
@@ -73,10 +76,9 @@ shift #(
     .o_carry    (lsr_carryout)
 );
 
-shift #(
-    .DATA_WIDTH (32),
-    .SHIFT_TYPE ("ASR")
-) shift_asr (
+// ASR module
+shift shift_asr (
+    .i_type     (ASR),
     .i_op       (op),
     .i_amount   (amount),
     .i_carry    (carryin),
@@ -84,10 +86,9 @@ shift #(
     .o_carry    (asr_carryout)
 );
 
-shift #(
-    .DATA_WIDTH (32),
-    .SHIFT_TYPE ("ROR")
-) shift_ror (
+// ROR module
+shift shift_ror (
+    .i_type     (ROR),
     .i_op       (op),
     .i_amount   (amount),
     .i_carry    (carryin),
